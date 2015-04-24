@@ -58,11 +58,10 @@ void HSVProcessor::process(int numFrames) {
 			double xcoord = sumX/totalBlue-frame.rows/2;
 			double ycoord = sumY/totalBlue-frame.cols/2;
 
-			double dist = sqrt(xcoord*xcoord+ycoord*ycoord);
+			//double dist = sqrt(xcoord*xcoord+ycoord*ycoord);
 
 			std::cout << "Centre of blue is: " << sumX/totalBlue << "," << sumY/totalBlue << std::endl;
-			std::cout << "Angle: " << atan2(xcoord, ycoord) << "Distance: " << dist << std::endl;
-			std::cout << "Frame size is: " << frame.rows << "," << frame.cols << std::endl;
+			//std::cout << "Angle: " << atan2(xcoord, ycoord) << "Distance: " << dist << std::endl;
 		} else {
 			std::cout << "No blue in image" << std::endl;
 		}
@@ -86,6 +85,7 @@ void HSVProcessor::process(int numFrames) {
 		}
 #endif
 	}
+	std::cout << "Frame size is: " << frame.rows << "," << frame.cols << std::endl;
 }
 
 bool HSVProcessor::isBlue(cv::Vec3b point)
