@@ -1,1 +1,1 @@
-time ./vision 0 1000
+time ./vision /dev/video0 1000
