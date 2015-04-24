@@ -1,1 +1,1 @@
-time ./vision /dev/video0 1000
+﻿time ./vision ./blueball.avi 1000
