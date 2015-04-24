@@ -45,7 +45,7 @@ void help(char** av) {
 			<< std::endl;
 }
 
-int process(cv::VideoCapture& capture) {
+int process(cv::VideoCapture& capture, int numFrames) {
 	int n = 0;
 	char filename[200];
 	std::string window_name = "video | q or esc to quit";
@@ -53,7 +53,7 @@ int process(cv::VideoCapture& capture) {
 	cv::namedWindow(window_name, CV_WINDOW_KEEPRATIO); //resizable window;
 	cv::setMouseCallback(window_name, onMouse, 0);
 	cv::Mat frame;
-	for (;;) {
+	for (int z = 0; z < numFrames; z++) {
 		capture >> frame;
 		if (frame.empty()) {
 			break;
@@ -132,11 +132,12 @@ bool isBlue(cv::Vec3b point) {
 
 int main(int ac, char** av) {
 
-	if (ac != 2) {
+	if (ac != 3) {
 		help(av);
 		return 1;
 	}
 	std::string arg = av[1];
+	int noFrames = std::stoi(av[2]);
 	cv::VideoCapture capture(arg); //try to open string, this will attempt to open it as a video file
 	if (!capture.isOpened()) //if this fails, try to open as a video camera, through the use of an integer param
 		capture.open(atoi(arg.c_str()));
@@ -145,5 +146,5 @@ int main(int ac, char** av) {
 		help(av);
 		return 1;
 	}
-	return process(capture);
+	return process(capture, noFrames);
 }
