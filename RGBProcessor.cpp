@@ -61,7 +61,7 @@ void RGBProcessor::process(int numFrames) {
 
 			//double dist = sqrt(xcoord*xcoord+ycoord*ycoord);
 
-			std::cout << "Centre of blue is: " << sumX/totalBlue << "," << sumY/totalBlue << std::endl;
+			std::cout << z << ")\tCentre of blue is: " << sumX/totalBlue << "," << sumY/totalBlue << std::endl;
 			//std::cout << "Angle: " << atan2(xcoord, ycoord) << "Distance: " << dist << std::endl;
 		} else {
 			std::cout << "No blue in image" << std::endl;
