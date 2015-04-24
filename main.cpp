@@ -50,8 +50,10 @@ int process(cv::VideoCapture& capture, int numFrames) {
 	char filename[200];
 	std::string window_name = "video | q or esc to quit";
 	std::cout << "press space to save a picture. q or esc to quit" << std::endl;
+#ifdef GUI
 	cv::namedWindow(window_name, CV_WINDOW_KEEPRATIO); //resizable window;
 	cv::setMouseCallback(window_name, onMouse, 0);
+#endif
 	cv::Mat frame;
 	for (int z = 0; z < numFrames; z++) {
 		capture >> frame;
@@ -68,6 +70,7 @@ int process(cv::VideoCapture& capture, int numFrames) {
 					sumX += i;
 					sumY += j;
 					totalBlue++;
+#ifdef GUI
 					frame.at<cv::Vec3b>(i, j)[RED]=0;
 					frame.at<cv::Vec3b>(i, j)[GREEN]=0;
 					frame.at<cv::Vec3b>(i, j)[BLUE]=255;
@@ -75,6 +78,7 @@ int process(cv::VideoCapture& capture, int numFrames) {
 					frame.at<cv::Vec3b>(i, j)[RED]=0;
 					frame.at<cv::Vec3b>(i, j)[GREEN]=0;
 					frame.at<cv::Vec3b>(i, j)[BLUE]=0;
+#endif
 				}
 
 			}
@@ -92,8 +96,9 @@ int process(cv::VideoCapture& capture, int numFrames) {
 			std::cout << "No blue in image" << std::endl;
 		}
 
-
+#ifdef GUI
 		cv::imshow(window_name, frame);
+#endif
 		char key = (char)cv::waitKey(5); //delay N millis, usually long enough to display and capture input
 		switch (key) {
 		case 'q':
