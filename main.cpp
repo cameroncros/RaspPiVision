@@ -23,16 +23,10 @@
 #include <iostream>
 #include <vector>
 #include <stdio.h>
+#include "ImageProcessor.h"
+#include "RGBProcessor.h"
+#include "HSVProcessor.h"
 
-#define BLUE 0
-#define GREEN 1
-#define RED 2
-
-void onMouse(int event, int x, int y, int, void*);
-bool isBlue(cv::Vec3b point);
-
-
-//hide the local functions in an anon namespace
 void help(char** av) {
 	std::cout << "\nThis program justs gets you started reading images from video\n"
 			"Usage:\n./" << av[0] << " <video device number>\n"
@@ -45,104 +39,20 @@ void help(char** av) {
 			<< std::endl;
 }
 
-int process(cv::VideoCapture& capture, int numFrames) {
-	int n = 0;
-	char filename[200];
-	std::string window_name = "video | q or esc to quit";
-	std::cout << "press space to save a picture. q or esc to quit" << std::endl;
-#ifdef GUI
-	cv::namedWindow(window_name, CV_WINDOW_KEEPRATIO); //resizable window;
-	cv::setMouseCallback(window_name, onMouse, 0);
-#endif
-	cv::Mat frame;
-	for (int z = 0; z < numFrames; z++) {
-		capture >> frame;
-		if (frame.empty()) {
-			break;
-		}
 
-		long sumX = 0, sumY = 0, totalBlue = 0;
-		for (int i = 0; i<frame.rows; i++)
-		{
-			for (int j = 0; j<frame.cols; j++)
-			{
-				if (isBlue(frame.at<cv::Vec3b>(i, j))) {
-					sumX += i;
-					sumY += j;
-					totalBlue++;
-#ifdef GUI
-					frame.at<cv::Vec3b>(i, j)[RED]=0;
-					frame.at<cv::Vec3b>(i, j)[GREEN]=0;
-					frame.at<cv::Vec3b>(i, j)[BLUE]=255;
-				} else {
-					frame.at<cv::Vec3b>(i, j)[RED]=0;
-					frame.at<cv::Vec3b>(i, j)[GREEN]=0;
-					frame.at<cv::Vec3b>(i, j)[BLUE]=0;
-#endif
-				}
 
-			}
-		}
-		if (totalBlue > 1) {
-			double xcoord = sumX/totalBlue-frame.rows/2;
-			double ycoord = sumY/totalBlue-frame.cols/2;
 
-			double dist = sqrt(xcoord*xcoord+ycoord*ycoord);
 
-			std::cout << "Centre of blue is: " << sumX/totalBlue << "," << sumY/totalBlue << std::endl;
-			std::cout << "Angle: " << atan2(xcoord, ycoord) << "Distance: " << dist << std::endl;
-			std::cout << "Frame size is: " << frame.rows << "," << frame.cols << std::endl;
-		} else {
-			std::cout << "No blue in image" << std::endl;
-		}
 
-#ifdef GUI
-		cv::imshow(window_name, frame);
-#endif
-		char key = (char)cv::waitKey(5); //delay N millis, usually long enough to display and capture input
-		switch (key) {
-		case 'q':
-		case 'Q':
-		case 27: //escape key
-			return 0;
-		case ' ': //Save an image
-			sprintf(filename, "filename%.3d.jpg", n++);
-			cv::imwrite(filename, frame);
-			std::cout << "Saved " << filename << std::endl;
-			break;
-		default:
-			break;
-		}
-	}
-	return 0;
-}
-
-void onMouse(int event, int x, int y, int, void*)
-{
-	if (event != CV_EVENT_LBUTTONDOWN)
-		return;
-
-	cv::Point pt = cv::Point(x, y);
-	std::cout << "x=" << pt.x << "\t y=" << pt.y << std::endl;
-
-}
-
-bool isBlue(cv::Vec3b point) {
-	if (point[BLUE] > 1.8*point[GREEN] &&
-		point[BLUE] > 1.8*point[RED]) {
-		return true;
-	}
-	return false;
-}
 
 int main(int ac, char** av) {
 
-	if (ac != 3) {
+	if (ac != 4) {
 		help(av);
 		return 1;
 	}
 	std::string arg = av[1];
-	int noFrames = std::stoi(av[2]);
+	int numFrames = std::stoi(av[3]);
 	cv::VideoCapture capture(arg); //try to open string, this will attempt to open it as a video file
 	if (!capture.isOpened()) //if this fails, try to open as a video camera, through the use of an integer param
 		capture.open(atoi(arg.c_str()));
@@ -151,5 +61,15 @@ int main(int ac, char** av) {
 		help(av);
 		return 1;
 	}
-	return process(capture, noFrames);
+	ImageProcessor *proc;
+	if (std::string(av[2]).compare("RGBBasic") == 0)
+	{
+		proc = new RGBProcessor(capture);
+	}
+	else if (std::string(av[2]).compare("HSVBasic") == 0)
+	{
+		proc = new HSVProcessor(capture);
+	}
+	proc->process(numFrames);
+	return 0;
 }
