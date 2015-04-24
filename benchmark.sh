@@ -1,1 +1,1 @@
-﻿time ./vision ./blueball.avi 1000
+time ./vision ./blueball.avi 1000
