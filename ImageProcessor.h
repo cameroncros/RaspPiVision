@@ -12,6 +12,8 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
+#include <vector>
+
 #define BLUE 0
 #define GREEN 1
 #define RED 2
@@ -24,6 +26,9 @@ protected:
 	int n = 0;
 	char filename[200];
 	std::string window_name = "video | q or esc to quit";
+	std::vector<double> baseline;
+	std::vector<double> calc;
+
 public:
 	ImageProcessor(cv::VideoCapture capture);
 	virtual ~ImageProcessor();
@@ -33,6 +38,8 @@ public:
 	void drawFrame(cv::Mat frame, double angle, double dist);
 	void processKeys(cv::Mat frame);
 	void initialiseWindow();
+	void loadBenchmark(std::string benchfile);
+	int compareToBaseline();
 };
 
 #endif /* IMAGEPROCESSOR_H_ */

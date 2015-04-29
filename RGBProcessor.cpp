@@ -21,6 +21,7 @@ void RGBProcessor::process(int numFrames) {
 	initialiseWindow();
 	cv::Mat frame;
 	double angle, dist;
+	cv::Vec3b black(0,0,0);
 	for (int z = 0; z < numFrames; z++) {
 		capture >> frame;
 		if (frame.empty()) {
@@ -36,6 +37,8 @@ void RGBProcessor::process(int numFrames) {
 					sumX += i;
 					sumY += j;
 					totalBlue++;
+				} else {
+					frame.at<cv::Vec3b>(i, j)=black;
 				}
 
 			}
@@ -46,9 +49,11 @@ void RGBProcessor::process(int numFrames) {
 
 			dist = sqrt(xcoord*xcoord+ycoord*ycoord);
 			angle = atan2(xcoord, ycoord);
+			calc.push_back(sumX/totalBlue);
+			calc.push_back(sumY/totalBlue);
 			printCentre(z, sumX/totalBlue, sumY/totalBlue);
 		} else {
-			std::cout << "No blue in image" << std::endl;
+			//std::cout << "No blue in image" << std::endl;
 		}
 
 		drawFrame(frame, angle, dist);

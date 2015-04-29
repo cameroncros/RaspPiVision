@@ -21,6 +21,7 @@ void HSVProcessor::process(int numFrames) {
 	initialiseWindow();
 	cv::Mat frame, hsvFrame;
 	double angle, dist;
+	cv::Vec3b black(0,0,0);
 	for (int z = 0; z < numFrames; z++) {
 		capture >> frame;
 		if (frame.empty()) {
@@ -32,10 +33,13 @@ void HSVProcessor::process(int numFrames) {
 		{
 			for (int j = 0; j<hsvFrame.cols; j++)
 			{
+
 				if (isBlue(hsvFrame.at<cv::Vec3b>(i, j))) {
 					sumX += i;
 					sumY += j;
 					totalBlue++;
+				} else {
+					frame.at<cv::Vec3b>(i, j)=black;
 				}
 
 			}
@@ -46,12 +50,11 @@ void HSVProcessor::process(int numFrames) {
 
 			dist = sqrt(xcoord*xcoord+ycoord*ycoord);
 			angle = atan2(xcoord, ycoord);
-			printCentre(z, sumX/totalBlue, sumY/totalBlue);
-
-
-			//std::cout << "Angle: " << angle << "Distance: " << dist << std::endl;
+			calc.push_back(sumX/totalBlue);
+			calc.push_back(sumY/totalBlue);
+			//printCentre(z, sumX/totalBlue, sumY/totalBlue);
 		} else {
-			std::cout << "No blue in image" << std::endl;
+			//std::cout << "No blue in image" << std::endl;
 		}
 		drawFrame(frame, angle, dist);
 		processKeys(frame);
@@ -60,7 +63,7 @@ void HSVProcessor::process(int numFrames) {
 
 bool HSVProcessor::isBlue(cv::Vec3b point)
 {
-	if (point[0] < 250 && point[0] > 210) {
+	if (point[0] < 140 && point[0] > 100) {
 		return true;
 	}
 	return false;

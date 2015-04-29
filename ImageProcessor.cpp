@@ -7,6 +7,8 @@
 
 #include "ImageProcessor.h"
 #include <iostream>
+#include <fstream>
+#include <vector>
 #include <stdio.h>
 
 #define GUI
@@ -21,7 +23,9 @@ ImageProcessor::~ImageProcessor() {
 
 void ImageProcessor::printCentre(int line, int x, int y)
 {
-	std::cout << line << ") " << x << "," << y << std::endl;
+	//std::cout << line << ") " << x << "," << y << std::endl;
+
+	std::cout << x << "," << y << ",";
 }
 
 void ImageProcessor::drawArrow(cv::Mat frame, double angle,
@@ -39,22 +43,24 @@ void ImageProcessor::drawArrow(cv::Mat frame, double angle,
 void ImageProcessor::drawFrame(cv::Mat frame, double angle, double dist)
 {
 #ifdef GUI
-		drawArrow(frame, angle, dist);
-		cv::imshow(window_name, frame);
+	drawArrow(frame, angle, dist);
+	cv::imshow(window_name, frame);
 #endif
 }
-
 
 void ImageProcessor::processKeys(cv::Mat frame)
 {
 #ifdef GUI
-		char key = (char)cv::waitKey(5); //delay N millis, usually long enough to display and capture input
+	char key = 0;
+	while (key != ' ') {
+		key= (char)cv::waitKey(5); //delay N millis, usually long enough to display and capture input
+
 		switch (key) {
 		case 'q':
 		case 'Q':
 		case 27: //escape key
-			return;
-		case ' ': //Save an image
+			exit;
+		case 's': //Save an image
 			sprintf(filename, "filename%.3d.jpg", n++);
 			cv::imwrite(filename, frame);
 			std::cout << "Saved " << filename << std::endl;
@@ -62,6 +68,7 @@ void ImageProcessor::processKeys(cv::Mat frame)
 		default:
 			break;
 		}
+	}
 #endif
 }
 
@@ -85,3 +92,47 @@ void onMouse(int event, int x, int y, int, void*)
 
 }
 
+void ImageProcessor::loadBenchmark(std::string benchfile)
+{
+	std::string line;
+	std::ifstream *myfile = new std::ifstream(benchfile);
+	if (myfile->is_open())
+	{
+		while ( std::getline (*myfile,line, ',') )
+		{
+			try {
+			double val = std::stod(line);
+
+			baseline.push_back(val);
+			}
+			catch (std::exception e) {
+				std::cout << "Invalid Argument: " << line << std::endl;
+			}
+
+		}
+		myfile->close();
+	}
+}
+
+int ImageProcessor::compareToBaseline()
+{
+	double error = 0;
+	double value;
+	if (baseline.size() != calc.size())
+	{
+		std::cout << "Outputs are different lengths" << std::endl;
+	}
+	else
+	{
+		for (int i = 0; i < baseline.size(); i++)
+		{
+			value = abs(baseline[i]-calc[i]);
+			if (value > error)
+			{
+				error = value;
+			}
+		}
+		std::cout << "Max Error: " << error << std::endl;
+	}
+	return error;
+}

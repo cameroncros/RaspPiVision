@@ -47,7 +47,7 @@ void help(char** av) {
 
 int main(int ac, char** av) {
 
-	if (ac != 4) {
+	if (ac != 5) {
 		help(av);
 		return 1;
 	}
@@ -71,5 +71,7 @@ int main(int ac, char** av) {
 		proc = new HSVProcessor(capture);
 	}
 	proc->process(numFrames);
+	proc->loadBenchmark(av[4]);
+	proc->compareToBaseline();
 	return 0;
 }
