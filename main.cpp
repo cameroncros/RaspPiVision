@@ -73,6 +73,7 @@ int main(int ac, char** av) {
 	proc->printType();
 	proc->process(numFrames);
 	proc->loadBenchmark(av[4]);
+	proc->printTime();
 	proc->compareToBaseline();
 	return 0;
 }

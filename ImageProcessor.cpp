@@ -24,6 +24,7 @@ void ImageProcessor::process(int numFrames) {
 	initialiseWindow();
 	cv::Mat frame, hsvFrame;
 	double angle, dist;
+	clock_t t = clock();
 	for (int z = 0; z < numFrames; z++) {
 		capture >> frame;
 		if (frame.empty()) {
@@ -33,6 +34,7 @@ void ImageProcessor::process(int numFrames) {
 		drawFrame(frame, angle, dist);
 		processKeys(frame);
 	}
+	difftime = clock()-t;
 }
 
 void ImageProcessor::printCentre(int line, int x, int y)
@@ -154,4 +156,9 @@ int ImageProcessor::compareToBaseline()
 void ImageProcessor::printType()
 {
 	std::cout << methodType << std::endl;
+}
+
+void ImageProcessor::printTime()
+{
+	std::cout << difftime/(CLOCKS_PER_SEC/1000) << " milliseconds" << std::endl;
 }

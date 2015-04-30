@@ -30,6 +30,7 @@ protected:
 	std::vector<double> calc;
 	std::string methodType;
 	cv::Vec3b black;
+	int difftime;
 
 public:
 	ImageProcessor(cv::VideoCapture capture);
@@ -44,6 +45,7 @@ public:
 	void loadBenchmark(std::string benchfile);
 	int compareToBaseline();
 	void printType();
+	void printTime();
 };
 
 #endif /* IMAGEPROCESSOR_H_ */
