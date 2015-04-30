@@ -14,27 +14,39 @@
 ImageProcessor::ImageProcessor(cv::VideoCapture capture) {
 	this->capture = capture;
 	black = cv::Vec3b(0,0,0);
+	minTime = INT32_MAX;
+	maxTime = INT32_MIN;
 }
 
 ImageProcessor::~ImageProcessor() {
 	// TODO Auto-generated destructor stub
 }
 
-void ImageProcessor::process(int numFrames) {
+void ImageProcessor::process(int maxFrames) {
 	initialiseWindow();
 	cv::Mat frame, hsvFrame;
+	long difftime;
 	double angle, dist;
-	clock_t t = clock();
-	for (int z = 0; z < numFrames; z++) {
+	for (int z = 0; z < maxFrames; z++) {
 		capture >> frame;
 		if (frame.empty()) {
 			break;
 		}
+		clock_t t = clock();
 		processFrame(frame);
+		difftime = clock()-t;
+		totalTime += difftime;
+		if (difftime > maxTime) {
+			maxTime = difftime;
+		}
+		if (difftime < minTime) {
+			minTime = difftime;
+		}
+
+		numFrames++;
 		drawFrame(frame, angle, dist);
 		processKeys(frame);
 	}
-	difftime = clock()-t;
 }
 
 void ImageProcessor::printCentre(int line, int x, int y)
@@ -153,12 +165,16 @@ int ImageProcessor::compareToBaseline()
 	return error;
 }
 
-void ImageProcessor::printType()
+void ImageProcessor::printReport()
 {
 	std::cout << methodType << std::endl;
-}
+	std::cout << "Total time taken (ms): " << totalTime/(CLOCKS_PER_SEC/1000) << std::endl;
+	std::cout << "Average Frame Time (ms): " << (totalTime/(CLOCKS_PER_SEC/1000))/numFrames << std::endl;
+	std::cout << "Minimum Frame Time (ms): " << minTime/(CLOCKS_PER_SEC/1000) << std::endl;
+	std::cout << "Maximum Frame Time (ms): " << maxTime/(CLOCKS_PER_SEC/1000) << std::endl;
+	compareToBaseline();
+	std::cout << std::endl;
 
-void ImageProcessor::printTime()
-{
-	std::cout << difftime/(CLOCKS_PER_SEC/1000) << " milliseconds" << std::endl;
+
+
 }
