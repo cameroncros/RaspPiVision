@@ -13,10 +13,26 @@
 
 ImageProcessor::ImageProcessor(cv::VideoCapture capture) {
 	this->capture = capture;
+	black = cv::Vec3b(0,0,0);
 }
 
 ImageProcessor::~ImageProcessor() {
 	// TODO Auto-generated destructor stub
+}
+
+void ImageProcessor::process(int numFrames) {
+	initialiseWindow();
+	cv::Mat frame, hsvFrame;
+	double angle, dist;
+	for (int z = 0; z < numFrames; z++) {
+		capture >> frame;
+		if (frame.empty()) {
+			break;
+		}
+		processFrame(frame);
+		drawFrame(frame, angle, dist);
+		processKeys(frame);
+	}
 }
 
 void ImageProcessor::printCentre(int line, int x, int y)

@@ -29,11 +29,13 @@ protected:
 	std::vector<double> baseline;
 	std::vector<double> calc;
 	std::string methodType;
+	cv::Vec3b black;
 
 public:
 	ImageProcessor(cv::VideoCapture capture);
 	virtual ~ImageProcessor();
-	virtual void process(int numFrames)=0;
+	void process(int numFrames);
+	virtual void processFrame(cv::Mat frame)=0;
 	void printCentre(int line, int x, int y);
 	void drawArrow(cv::Mat frame, double angle, double dist);
 	void drawFrame(cv::Mat frame, double angle, double dist);
