@@ -11,8 +11,6 @@
 #include <vector>
 #include <stdio.h>
 
-#define GUI
-
 ImageProcessor::ImageProcessor(cv::VideoCapture capture) {
 	this->capture = capture;
 }
@@ -135,4 +133,9 @@ int ImageProcessor::compareToBaseline()
 		std::cout << "Max Error: " << error << std::endl;
 	}
 	return error;
+}
+
+void ImageProcessor::printType()
+{
+	std::cout << methodType << std::endl;
 }

@@ -28,6 +28,7 @@ protected:
 	std::string window_name = "video | q or esc to quit";
 	std::vector<double> baseline;
 	std::vector<double> calc;
+	std::string methodType;
 
 public:
 	ImageProcessor(cv::VideoCapture capture);
@@ -40,6 +41,7 @@ public:
 	void initialiseWindow();
 	void loadBenchmark(std::string benchfile);
 	int compareToBaseline();
+	void printType();
 };
 
 #endif /* IMAGEPROCESSOR_H_ */

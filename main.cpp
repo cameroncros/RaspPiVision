@@ -70,6 +70,7 @@ int main(int ac, char** av) {
 	{
 		proc = new HSVProcessor(capture);
 	}
+	proc->printType();
 	proc->process(numFrames);
 	proc->loadBenchmark(av[4]);
 	proc->compareToBaseline();

@@ -10,6 +10,7 @@
 
 HSVProcessor::HSVProcessor(cv::VideoCapture capture) : ImageProcessor::ImageProcessor(capture) {
 	// TODO Auto-generated constructor stub
+	methodType = "HSVBasic";
 
 }
 

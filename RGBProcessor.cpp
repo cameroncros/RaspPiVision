@@ -9,7 +9,7 @@
 
 #include <iostream>
 RGBProcessor::RGBProcessor(cv::VideoCapture capture) : ImageProcessor::ImageProcessor(capture) {
-	// TODO Auto-generated constructor stub
+	methodType = "RGBBasic";
 
 }
 
@@ -51,7 +51,7 @@ void RGBProcessor::process(int numFrames) {
 			angle = atan2(xcoord, ycoord);
 			calc.push_back(sumX/totalBlue);
 			calc.push_back(sumY/totalBlue);
-			printCentre(z, sumX/totalBlue, sumY/totalBlue);
+			//printCentre(z, sumX/totalBlue, sumY/totalBlue);
 		} else {
 			//std::cout << "No blue in image" << std::endl;
 		}
