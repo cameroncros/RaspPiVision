@@ -33,7 +33,8 @@ void ImageProcessor::process(int maxFrames) {
 			break;
 		}
 		clock_t t = clock();
-		processFrame(frame);
+		calc[z] = processFrame(frame);
+		//printCentre(z, calc[z]);
 		difftime = clock()-t;
 		totalTime += difftime;
 		if (difftime > maxTime) {
@@ -44,16 +45,22 @@ void ImageProcessor::process(int maxFrames) {
 		}
 
 		numFrames++;
+
+		double xcoord = calc[z].getX()-frame.rows/2;
+		double ycoord = calc[z].getY()-frame.cols/2;
+
+		dist = sqrt(xcoord*xcoord+ycoord*ycoord);
+		angle = atan2(xcoord, ycoord);
 		drawFrame(frame, angle, dist);
 		processKeys(frame);
 	}
 }
 
-void ImageProcessor::printCentre(int line, int x, int y)
+void ImageProcessor::printCentre(int line, DoublePair val)
 {
 	//std::cout << line << ") " << x << "," << y << std::endl;
 
-	std::cout << x << "," << y << ",";
+	std::cout << line << "," << val.getX() << "," << val.getY() << std::endl;
 }
 
 void ImageProcessor::drawArrow(cv::Mat frame, double angle,
@@ -126,12 +133,18 @@ void ImageProcessor::loadBenchmark(std::string benchfile)
 	std::ifstream *myfile = new std::ifstream(benchfile);
 	if (myfile->is_open())
 	{
-		while ( std::getline (*myfile,line, ',') )
+		while (!myfile->eof() )
 		{
-			try {
-			double val = std::stod(line);
 
-			baseline.push_back(val);
+			try {
+				std::getline (*myfile,line, ',');
+				int lineNo = std::stoi(line);
+				std::getline (*myfile,line, ',');
+				double x = std::stod(line);
+				std::getline (*myfile,line);
+				double y = std::stod(line);
+				DoublePair *vals = new DoublePair(x,y);
+				baseline[lineNo] = *vals;
 			}
 			catch (std::exception e) {
 				std::cout << "Invalid Argument: " << line << std::endl;
@@ -152,9 +165,11 @@ int ImageProcessor::compareToBaseline()
 	}
 	else
 	{
-		for (int i = 0; i < baseline.size(); i++)
+		for (auto const &it1 : baseline)
 		{
-			value = abs(baseline[i]-calc[i]);
+
+			DoublePair val = calc[it1.first];
+			value = it1.second.compare(val);
 			if (value > error)
 			{
 				error = value;

@@ -18,9 +18,8 @@ HSVProcessor::~HSVProcessor() {
 	// TODO Auto-generated destructor stub
 }
 
-void HSVProcessor::processFrame(cv::Mat frame)
+DoublePair HSVProcessor::processFrame(cv::Mat frame)
 {
-	double dist, angle;
 	cv::Mat hsvFrame;
 	cv::cvtColor(frame, hsvFrame, cv::COLOR_BGR2HSV_FULL);
 			long sumX = 0, sumY = 0, totalBlue = 0;
@@ -40,16 +39,9 @@ void HSVProcessor::processFrame(cv::Mat frame)
 				}
 			}
 			if (totalBlue > 1) {
-				double xcoord = sumX/totalBlue-hsvFrame.rows/2;
-				double ycoord = sumY/totalBlue-hsvFrame.cols/2;
-
-				dist = sqrt(xcoord*xcoord+ycoord*ycoord);
-				angle = atan2(xcoord, ycoord);
-				calc.push_back(sumX/totalBlue);
-				calc.push_back(sumY/totalBlue);
-				//printCentre(z, sumX/totalBlue, sumY/totalBlue);
+				return DoublePair(sumX/totalBlue, sumY/totalBlue);
 			} else {
-				//std::cout << "No blue in image" << std::endl;
+				return DoublePair(-1,-1);
 			}
 }
 

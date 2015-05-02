@@ -15,7 +15,7 @@ public:
 	RGBProcessor(cv::VideoCapture capture);
 	virtual ~RGBProcessor();
 
-	void processFrame(cv::Mat frame);
+	DoublePair processFrame(cv::Mat frame);
 	bool isBlue(cv::Vec3b point);
 };
 
