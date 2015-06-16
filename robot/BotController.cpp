@@ -9,6 +9,7 @@
 #include "gertbot/gb_drivers.h"
 #include <iostream>
 #include <unistd.h>
+#include <cmath>
 
 BotController::BotController() {
 	open_connection(0);
@@ -40,6 +41,8 @@ void BotController::move(double direction, double speed) {
 }
 
 double BotController::motorPower(int motorNum, double direction) {
+	//convert radians to degrees
+	direction = direction*(180/M_PI);
 	//different motor offsets
 	if (motorNum == 1) {
 		direction-=120;
