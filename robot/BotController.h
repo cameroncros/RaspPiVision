@@ -16,7 +16,7 @@ public:
 	void move(double direction, double speed);
 	double motorPower(int motorId, double direction);
 	void spin(double angle);
-
+	void stop();
 };
 
 #endif /* BOTCONTROLLER_H_ */

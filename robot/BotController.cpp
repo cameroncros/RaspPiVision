@@ -8,6 +8,8 @@
 #include "BotController.h"
 #include "gertbot/gb_drivers.h"
 #include <iostream>
+#include <unistd.h>
+
 BotController::BotController() {
 	open_connection(0);
 	stop_all();
@@ -25,8 +27,8 @@ BotController::~BotController() {
 //need some complex math to make the bot move correctly
 void BotController::move(double direction, double speed) {
 	for (int i = 0; i < 3; i++) {
-		double power = motorPower(i, direction)
-		pwm_brushed(0, i, 10, abs(power));
+		double power = motorPower(i, direction);
+		pwm_brushed(0, i, 1000, abs(power));
 		if (power > 0) {
 			move_brushed(0, i, GB_MOVE_A);
 		} else if (power < 0) {
@@ -71,10 +73,6 @@ void BotController::spin(double angle) {
 
 }
 
-//int main(int argc, char **argv)
-//{
-//	BotController *bt = new BotController();
-//	for (int i = 0; i < 14; i++) {
-//		std::cout << (i*30) << "\t| " << bt->motorPower(0, i*30) << "\t| " << bt->motorPower(1, i*30) << "\t| " << bt->motorPower(2, i*30) << "\t|\t" << std::endl;
-//	}
-//}
+void BotController::stop() {
+	stop_all();
+}

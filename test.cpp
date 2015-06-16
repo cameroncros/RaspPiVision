@@ -23,9 +23,9 @@
 #include <iostream>
 #include <vector>
 #include <stdio.h>
-#include "ImageProcessor.h"
-#include "RGBProcessor.h"
-#include "HSVProcessor.h"
+#include "vision/ImageProcessor.h"
+#include "vision/RGBProcessor.h"
+#include "vision/HSVProcessor.h"
 
 void help(char** av) {
 	std::cout << "\nThis program justs gets you started reading images from video\n"
