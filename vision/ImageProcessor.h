@@ -37,6 +37,8 @@ public:
 	ImageProcessor(cv::VideoCapture capture);
 	virtual ~ImageProcessor();
 	void process(int numFrames);
+	double distance(cv::Mat frame, DoublePair var);
+	double angle(cv::Mat frame, DoublePair var);
 	virtual DoublePair processFrame(cv::Mat frame)=0;
 	void printCentre(int line, DoublePair val);
 	void drawArrow(cv::Mat frame, double angle, double dist);

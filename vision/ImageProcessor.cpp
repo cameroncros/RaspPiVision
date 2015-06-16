@@ -26,7 +26,6 @@ void ImageProcessor::process(int maxFrames) {
 	initialiseWindow();
 	cv::Mat frame, hsvFrame;
 	long difftime;
-	double angle, dist;
 	for (int z = 0; z < maxFrames; z++) {
 		capture >> frame;
 		if (frame.empty()) {
@@ -46,14 +45,25 @@ void ImageProcessor::process(int maxFrames) {
 
 		numFrames++;
 
-		double xcoord = calc[z].getX()-frame.rows/2;
-		double ycoord = calc[z].getY()-frame.cols/2;
-
-		dist = sqrt(xcoord*xcoord+ycoord*ycoord);
-		angle = atan2(xcoord, ycoord);
-		drawFrame(frame, angle, dist);
+		drawFrame(frame, angle(frame, calc[z]), distance(frame, calc[z]));
 		processKeys(frame);
 	}
+}
+
+double ImageProcessor::distance(cv::Mat frame, DoublePair var)
+{
+	double xcoord = var.getX()-frame.rows/2;
+	double ycoord = var.getY()-frame.cols/2;
+
+	return sqrt(xcoord*xcoord+ycoord*ycoord);
+}
+
+double ImageProcessor::angle(cv::Mat frame, DoublePair var)
+{
+	double xcoord = var.getX()-frame.rows/2;
+	double ycoord = var.getY()-frame.cols/2;
+
+	return atan2(xcoord, ycoord);
 }
 
 void ImageProcessor::printCentre(int line, DoublePair val)
