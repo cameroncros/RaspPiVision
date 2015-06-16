@@ -6,24 +6,27 @@
  */
 
 #include "robot/BotController.h"
+#include "vision/ImageProcessor.h"
+#include "vision/HSVProcessor.h"
 #include <unistd.h>
 #include <iostream>
 
 
 int main(int argc, char **argv)
 {
-	BotController *bt = new BotController();
-
-	usleep(1000);
-	bt->move(0, 100);
-	usleep(5000);
-	bt->move(180, 100);
-	usleep(5000);
-	bt->stop();
-	for (int i = 0; i < 14; i++) {
-		bt->move(i*3, 100);
-		usleep(50);
-		std::cout << (i*30) << "\t| " << bt->motorPower(0, i*30) << "\t| " << bt->motorPower(1, i*30) << "\t| " << bt->motorPower(2, i*30) << "\t|\t" << std::endl;
+	if (argc != 2) {
+		exit(1);
 	}
-	bt->stop();
+
+	cv::VideoCapture capture(argv[1]);
+
+	ImageProcessor *ip = new HSVProcessor(capture);
+	BotController *bt = new BotController();
+	DoublePair dp;
+	cv::Mat frame;
+	while (true) {
+		capture >> frame;
+		dp = ip->processFrame(frame);
+		bt->move(ip->angle(frame, dp), ip->distance(frame, dp));
+	}
 }
