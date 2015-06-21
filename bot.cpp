@@ -27,6 +27,13 @@ int main(int argc, char **argv)
 	while (true) {
 		capture >> frame;
 		dp = ip->processFrame(frame);
-		bt->move(ip->angle(frame, dp), ip->distance(frame, dp));
+		if (dp.getX() != -1 && dp.getY() != -1) {
+			double angle = ip->angle(frame, dp);
+			double distance = ip->distance(frame, dp);
+			std::cout << angle << " - " << distance << std::endl;
+			bt->move(angle, distance);
+		} else {
+			std::cout << "No object found, sitting still" << std::endl;
+		}
 	}
 }
