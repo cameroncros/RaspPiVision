@@ -41,8 +41,6 @@ void BotController::move(double direction, double speed) {
 }
 
 double BotController::motorPower(int motorNum, double direction) {
-	//convert radians to degrees
-	direction = direction*(180/M_PI);
 	//different motor offsets
 	if (motorNum == 1) {
 		direction-=120;

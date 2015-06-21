@@ -63,7 +63,7 @@ double ImageProcessor::angle(cv::Mat frame, DoublePair var)
 	double xcoord = var.getX()-frame.rows/2;
 	double ycoord = var.getY()-frame.cols/2;
 
-	return atan2(xcoord, ycoord);
+	return atan2(xcoord, ycoord)*180/M_PI;
 }
 
 void ImageProcessor::printCentre(int line, DoublePair val)
