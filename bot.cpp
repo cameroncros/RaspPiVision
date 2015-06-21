@@ -17,8 +17,14 @@ int main(int argc, char **argv)
 	if (argc != 2) {
 		exit(1);
 	}
-
-	cv::VideoCapture capture(argv[1]);
+	std::string arg = argv[1];
+ 	cv::VideoCapture capture(arg); //try to open string, this will attempt 
+        if (!capture.isOpened()) //if this fails, try to open as a video camera
+                capture.open(atoi(arg.c_str()));
+        if (!capture.isOpened()) {
+                std::cerr << "Failed to open a video device or video file!\n" << std::endl;
+                return 1;
+        }
 
 	ImageProcessor *ip = new HSVProcessor(capture);
 	BotController *bt = new BotController();
