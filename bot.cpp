@@ -50,6 +50,7 @@ int main(int argc, char **argv)
 			ip->saveFrame(frame);
 		} else {
 			std::cout << "No object found, sitting still" << std::endl;
+			bt->stop();
 		}
 	}
 	std::cout << "Shutting down" << std::endl;
