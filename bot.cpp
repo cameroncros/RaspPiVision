@@ -46,6 +46,8 @@ int main(int argc, char **argv)
 			double distance = ip->distance(frame, dp);
 			std::cout << angle << " - " << distance << std::endl;
 			bt->move(angle, distance);
+			ip->drawArrow(frame, angle, distance);
+			ip->saveFrame(frame);
 		} else {
 			std::cout << "No object found, sitting still" << std::endl;
 		}

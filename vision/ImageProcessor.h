@@ -43,6 +43,7 @@ public:
 	void printCentre(int line, DoublePair val);
 	void drawArrow(cv::Mat frame, double angle, double dist);
 	void drawFrame(cv::Mat frame, double angle, double dist);
+	void saveFrame(const cv::Mat& frame);
 	void processKeys(cv::Mat frame);
 	void initialiseWindow();
 	void loadBenchmark(std::string benchfile);

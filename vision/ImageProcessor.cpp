@@ -93,6 +93,12 @@ void ImageProcessor::drawFrame(cv::Mat frame, double angle, double dist)
 #endif
 }
 
+void ImageProcessor::saveFrame(const cv::Mat& frame) {
+	sprintf(filename, "filename%.3d.jpg", n++);
+	cv::imwrite(filename, frame);
+	std::cout << "Saved " << filename << std::endl;
+}
+
 void ImageProcessor::processKeys(cv::Mat frame)
 {
 #ifdef GUI
@@ -106,9 +112,7 @@ void ImageProcessor::processKeys(cv::Mat frame)
 		case 27: //escape key
 			exit;
 		case 's': //Save an image
-			sprintf(filename, "filename%.3d.jpg", n++);
-			cv::imwrite(filename, frame);
-			std::cout << "Saved " << filename << std::endl;
+			saveFrame(frame);
 			break;
 		default:
 			break;
