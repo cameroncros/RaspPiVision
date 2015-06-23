@@ -34,9 +34,9 @@ DoublePair RGBProcessor::processFrame(cv::Mat frame) {
 		}
 	}
 	if (totalBlue > 1) {
-		return DoublePair(sumX/totalBlue, sumY/totalBlue);
+		return DoublePair(sumX/totalBlue, sumY/totalBlue, totalBlue);
 	} else {
-		return DoublePair(-1,-1);
+		return DoublePair(-1,-1,-1);
 	}
 
 }

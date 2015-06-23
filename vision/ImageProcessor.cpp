@@ -141,6 +141,8 @@ void onMouse(int event, int x, int y, int, void*)
 
 }
 
+
+//TODO: update benchmark to include size of object
 void ImageProcessor::loadBenchmark(std::string benchfile)
 {
 	std::string line;
@@ -157,7 +159,7 @@ void ImageProcessor::loadBenchmark(std::string benchfile)
 				double x = std::stod(line);
 				std::getline (*myfile,line);
 				double y = std::stod(line);
-				DoublePair *vals = new DoublePair(x,y);
+				DoublePair *vals = new DoublePair(x,y,0);
 				baseline[lineNo] = *vals;
 			}
 			catch (std::exception e) {

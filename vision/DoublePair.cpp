@@ -13,9 +13,10 @@ DoublePair::DoublePair() {
 	this->y = -1;
 }
 
-DoublePair::DoublePair(double x, double y) {
+DoublePair::DoublePair(double x, double y, double size) {
 	this->x = x;
 	this->y = y;
+	this->size = size;
 }
 
 DoublePair::~DoublePair() {
@@ -56,4 +57,12 @@ double DoublePair::compare(const DoublePair val) const
 	double xdiff = x-val.getX();
 	double ydiff = y-val.getY();
 	return sqrt(xdiff*xdiff + ydiff*ydiff);
+}
+
+double DoublePair::getSize() const {
+	return size;
+}
+
+void DoublePair::setSize(double size) {
+	this->size = size;
 }
