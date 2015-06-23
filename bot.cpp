@@ -10,13 +10,21 @@
 #include "vision/HSVProcessor.h"
 #include <unistd.h>
 #include <iostream>
+#include <signal.h>
 
+static volatile int keepRunning = 1;
+
+void intHandler(int dummy) {
+    keepRunning = 0;
+}
 
 int main(int argc, char **argv)
 {
 	if (argc != 2) {
 		exit(1);
 	}
+	signal(SIGINT, intHandler);
+
 	std::string arg = argv[1];
  	cv::VideoCapture capture(arg); //try to open string, this will attempt 
         if (!capture.isOpened()) //if this fails, try to open as a video camera
@@ -30,7 +38,7 @@ int main(int argc, char **argv)
 	BotController *bt = new BotController();
 	DoublePair dp;
 	cv::Mat frame;
-	while (true) {
+	while (keepRunning) {
 		capture >> frame;
 		dp = ip->processFrame(frame);
 		if (dp.getX() != -1 && dp.getY() != -1) {
@@ -42,4 +50,6 @@ int main(int argc, char **argv)
 			std::cout << "No object found, sitting still" << std::endl;
 		}
 	}
+	std::cout << "Shutting down" << std::endl;
+	bt->stop();
 }
