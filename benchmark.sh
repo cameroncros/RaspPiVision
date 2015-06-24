@@ -1,2 +1,2 @@
-./test ./blueball.avi RGBBasic 1000 ./blueball.txt
-./test ./blueball.avi HSVBasic 1000 ./blueball.txt
+./test ./tests/blueball.avi RGBBasic 1000 ./tests/blueball.txt
+./test ./tests/blueball.avi HSVBasic 1000 ./tests/blueball.txt
