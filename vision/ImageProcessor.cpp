@@ -50,7 +50,7 @@ void ImageProcessor::process(int maxFrames) {
 	}
 }
 
-double ImageProcessor::distance(cv::Mat frame, DoublePair var)
+double ImageProcessor::distance(cv::Mat frame, Region var)
 {
 	double xcoord = var.getX()-frame.rows/2;
 	double ycoord = var.getY()-frame.cols/2;
@@ -58,7 +58,7 @@ double ImageProcessor::distance(cv::Mat frame, DoublePair var)
 	return sqrt(xcoord*xcoord+ycoord*ycoord);
 }
 
-double ImageProcessor::angle(cv::Mat frame, DoublePair var)
+double ImageProcessor::angle(cv::Mat frame, Region var)
 {
 	double xcoord = var.getX()-frame.rows/2;
 	double ycoord = var.getY()-frame.cols/2;
@@ -66,7 +66,7 @@ double ImageProcessor::angle(cv::Mat frame, DoublePair var)
 	return atan2(xcoord, ycoord)*180/M_PI;
 }
 
-void ImageProcessor::printCentre(int line, DoublePair val)
+void ImageProcessor::printCentre(int line, Region val)
 {
 	//std::cout << line << ") " << x << "," << y << std::endl;
 
@@ -159,7 +159,7 @@ void ImageProcessor::loadBenchmark(std::string benchfile)
 				double x = std::stod(line);
 				std::getline (*myfile,line);
 				double y = std::stod(line);
-				DoublePair *vals = new DoublePair(x,y,0);
+				Region *vals = new Region(x,y,0);
 				baseline[lineNo] = *vals;
 			}
 			catch (std::exception e) {
@@ -184,7 +184,7 @@ int ImageProcessor::compareToBaseline()
 		for (auto const &it1 : baseline)
 		{
 
-			DoublePair val = calc[it1.first];
+			Region val = calc[it1.first];
 			value = it1.second.compare(val);
 			if (value > error)
 			{

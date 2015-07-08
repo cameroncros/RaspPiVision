@@ -18,7 +18,7 @@ HSVProcessor::~HSVProcessor() {
 	// TODO Auto-generated destructor stub
 }
 
-DoublePair HSVProcessor::processFrame(cv::Mat frame)
+Region HSVProcessor::processFrame(cv::Mat frame)
 {
 	cv::Mat hsvFrame;
 	cv::cvtColor(frame, hsvFrame, cv::COLOR_BGR2HSV_FULL);
@@ -39,9 +39,9 @@ DoublePair HSVProcessor::processFrame(cv::Mat frame)
 				}
 			}
 			if (totalBlue > 1) {
-				return DoublePair(sumX/totalBlue, sumY/totalBlue, totalBlue);
+				return Region(sumX/totalBlue, sumY/totalBlue, totalBlue);
 			} else {
-				return DoublePair(-1,-1,-1);
+				return Region(-1,-1,-1);
 			}
 }
 

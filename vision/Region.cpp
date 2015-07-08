@@ -5,43 +5,44 @@
  *      Author: cameron
  */
 
-#include "DoublePair.h"
+#include "Region.h"
+
 #include <math.h>
 
-DoublePair::DoublePair() {
+Region::Region() {
 	this->x = -1;
 	this->y = -1;
 }
 
-DoublePair::DoublePair(double x, double y, double size) {
+Region::Region(double x, double y, double size) {
 	this->x = x;
 	this->y = y;
 	this->size = size;
 }
 
-DoublePair::~DoublePair() {
+Region::~Region() {
 }
 
-double DoublePair::getX() const
+double Region::getX() const
 {
 	return x;
 }
-double DoublePair::getY() const
+double Region::getY() const
 {
 	return y;
 }
 
 
-void DoublePair::setX(double x)
+void Region::setX(double x)
 {
 	this->x=x;
 }
-void DoublePair::setY(double y)
+void Region::setY(double y)
 {
 	this->y=y;
 }
 
-bool DoublePair::isNull() const
+bool Region::isNull() const
 {
 	if (x == -1 && y == -1) {
 		return true;
@@ -49,7 +50,7 @@ bool DoublePair::isNull() const
 	return false;
 }
 
-double DoublePair::compare(const DoublePair val) const
+double Region::compare(const Region val) const
 {
 	if (this->isNull() && val.isNull()) {
 		return 0;
@@ -59,10 +60,10 @@ double DoublePair::compare(const DoublePair val) const
 	return sqrt(xdiff*xdiff + ydiff*ydiff);
 }
 
-double DoublePair::getSize() const {
+double Region::getSize() const {
 	return size;
 }
 
-void DoublePair::setSize(double size) {
+void Region::setSize(double size) {
 	this->size = size;
 }

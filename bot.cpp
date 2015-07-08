@@ -36,7 +36,7 @@ int main(int argc, char **argv)
 
 	ImageProcessor *ip = new HSVProcessor(capture);
 	BotController *bt = new BotController();
-	DoublePair dp;
+	Region dp;
 	cv::Mat frame;
 	while (keepRunning) {
 		capture >> frame;

@@ -1,20 +1,20 @@
 /*
- * DoublePair.h
+ * Region.h
  *
  *  Created on: 3 May 2015
  *      Author: cameron
  */
 
-#ifndef DOUBLEPAIR_H_
-#define DOUBLEPAIR_H_
+#ifndef REGION_H_
+#define REGION_H_
 
-class DoublePair {
+class Region {
 	double x, y;
 	double size;
 public:
-	DoublePair();
-	DoublePair(double x, double y, double size);
-	virtual ~DoublePair();
+	Region();
+	Region(double x, double y, double size);
+	virtual ~Region();
 	double getX() const;
 	double getY() const;
 	double getSize() const;
@@ -22,7 +22,7 @@ public:
 	void setY(double y);
 	void setSize(double size);
 	bool isNull() const;
-	double compare(const DoublePair val) const;
+	double compare(const Region val) const;
 };
 
-#endif /* DOUBLEPAIR_H_ */
+#endif /* REGION_H_ */

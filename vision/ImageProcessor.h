@@ -11,8 +11,8 @@
 #include <opencv2/opencv.hpp>
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
-#include "DoublePair.h"
 #include <vector>
+#include "Region.h"
 
 #define BLUE 0
 #define GREEN 1
@@ -26,8 +26,8 @@ protected:
 	int n = 0;
 	char filename[200];
 	std::string window_name = "video | q or esc to quit";
-	std::map<int, DoublePair> baseline;
-	std::map<int, DoublePair> calc;
+	std::map<int, Region> baseline;
+	std::map<int, Region> calc;
 	std::string methodType;
 	cv::Vec3b black;
 	long totalTime, minTime, maxTime;
@@ -37,10 +37,10 @@ public:
 	ImageProcessor(cv::VideoCapture capture);
 	virtual ~ImageProcessor();
 	void process(int numFrames);
-	double distance(cv::Mat frame, DoublePair var);
-	double angle(cv::Mat frame, DoublePair var);
-	virtual DoublePair processFrame(cv::Mat frame)=0;
-	void printCentre(int line, DoublePair val);
+	double distance(cv::Mat frame, Region var);
+	double angle(cv::Mat frame, Region var);
+	virtual Region processFrame(cv::Mat frame)=0;
+	void printCentre(int line, Region val);
 	void drawArrow(cv::Mat frame, double angle, double dist);
 	void drawFrame(cv::Mat frame, double angle, double dist);
 	void saveFrame(const cv::Mat& frame);
