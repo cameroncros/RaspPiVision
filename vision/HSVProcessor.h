@@ -15,7 +15,7 @@ public:
 	HSVProcessor(cv::VideoCapture capture);
 	virtual ~HSVProcessor();
 
-	Region processFrame(cv::Mat frame);
+	Region *processFrame(cv::Mat &frame);
 	bool isBlue(cv::Vec3b point);
 };
 

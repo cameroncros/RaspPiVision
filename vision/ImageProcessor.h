@@ -22,29 +22,30 @@ void onMouse(int event, int x, int y, int, void*);
 
 class ImageProcessor {
 protected:
-	cv::VideoCapture capture;\
+	cv::VideoCapture *capture;
 	int n = 0;
 	char filename[200];
 	std::string window_name = "video | q or esc to quit";
-	std::map<int, Region> baseline;
-	std::map<int, Region> calc;
+	std::map<int, Region*> baseline;
+	std::map<int, Region*> calc;
 	std::string methodType;
 	cv::Vec3b black;
 	long totalTime, minTime, maxTime;
 	int numFrames;
+	Region *foundRegion;
 
 public:
-	ImageProcessor(cv::VideoCapture capture);
+	ImageProcessor(cv::VideoCapture &capture);
 	virtual ~ImageProcessor();
 	void process(int numFrames);
-	double distance(cv::Mat frame, Region var);
-	double angle(cv::Mat frame, Region var);
-	virtual Region processFrame(cv::Mat frame)=0;
-	void printCentre(int line, Region val);
-	void drawArrow(cv::Mat frame, double angle, double dist);
-	void drawFrame(cv::Mat frame, double angle, double dist);
+	double distance(cv::Mat &frame, Region &var);
+	double angle(cv::Mat &frame, Region &var);
+	virtual Region *processFrame(cv::Mat &frame)=0;
+	void printCentre(int line, Region &val);
+	void drawArrow(cv::Mat &frame, double angle, double dist);
+	void drawFrame(cv::Mat &frame, double angle, double dist);
 	void saveFrame(const cv::Mat& frame);
-	void processKeys(cv::Mat frame);
+	void processKeys(cv::Mat &frame);
 	void initialiseWindow();
 	void loadBenchmark(std::string benchfile);
 	int compareToBaseline();

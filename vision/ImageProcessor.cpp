@@ -11,8 +11,8 @@
 #include <vector>
 #include <stdio.h>
 
-ImageProcessor::ImageProcessor(cv::VideoCapture capture) {
-	this->capture = capture;
+ImageProcessor::ImageProcessor(cv::VideoCapture &capture) {
+	this->capture = &capture;
 	black = cv::Vec3b(0,0,0);
 	minTime = INT32_MAX;
 	maxTime = INT32_MIN;
@@ -27,7 +27,7 @@ void ImageProcessor::process(int maxFrames) {
 	cv::Mat frame, hsvFrame;
 	long difftime;
 	for (int z = 0; z < maxFrames; z++) {
-		capture >> frame;
+		*capture >> frame;
 		if (frame.empty()) {
 			break;
 		}
@@ -44,36 +44,41 @@ void ImageProcessor::process(int maxFrames) {
 		}
 
 		numFrames++;
-
-		drawFrame(frame, angle(frame, calc[z]), distance(frame, calc[z]));
+		drawFrame(frame, angle(frame, *calc[z]), distance(frame, *calc[z]));
 		processKeys(frame);
 	}
 }
 
-double ImageProcessor::distance(cv::Mat frame, Region var)
+double ImageProcessor::distance(cv::Mat &frame, Region &var)
 {
+	if (&var == NULL) {
+		return 0;
+	}
 	double xcoord = var.getX()-frame.rows/2;
 	double ycoord = var.getY()-frame.cols/2;
 
 	return sqrt(xcoord*xcoord+ycoord*ycoord);
 }
 
-double ImageProcessor::angle(cv::Mat frame, Region var)
+double ImageProcessor::angle(cv::Mat &frame, Region &var)
 {
+	if (&var == NULL) {
+		return 0;
+	}
 	double xcoord = var.getX()-frame.rows/2;
 	double ycoord = var.getY()-frame.cols/2;
 
 	return atan2(xcoord, ycoord)*180/M_PI;
 }
 
-void ImageProcessor::printCentre(int line, Region val)
+void ImageProcessor::printCentre(int line, Region &val)
 {
 	//std::cout << line << ") " << x << "," << y << std::endl;
 
 	std::cout << line << "," << val.getX() << "," << val.getY() << std::endl;
 }
 
-void ImageProcessor::drawArrow(cv::Mat frame, double angle,
+void ImageProcessor::drawArrow(cv::Mat &frame, double angle,
 		double dist) {
 	cv::Point start, finish;
 	start.x = frame.cols/2;
@@ -85,7 +90,7 @@ void ImageProcessor::drawArrow(cv::Mat frame, double angle,
 	cv::line(frame, start, finish, cv::Scalar(128,128,128), 10);
 }
 
-void ImageProcessor::drawFrame(cv::Mat frame, double angle, double dist)
+void ImageProcessor::drawFrame(cv::Mat &frame, double angle, double dist)
 {
 #ifdef GUI
 	drawArrow(frame, angle, dist);
@@ -99,7 +104,7 @@ void ImageProcessor::saveFrame(const cv::Mat& frame) {
 	std::cout << "Saved " << filename << std::endl;
 }
 
-void ImageProcessor::processKeys(cv::Mat frame)
+void ImageProcessor::processKeys(cv::Mat &frame)
 {
 #ifdef GUI
 	char key = 0;
@@ -159,8 +164,7 @@ void ImageProcessor::loadBenchmark(std::string benchfile)
 				double x = std::stod(line);
 				std::getline (*myfile,line);
 				double y = std::stod(line);
-				Region *vals = new Region(x,y,0);
-				baseline[lineNo] = *vals;
+				baseline[lineNo] = new Region(x,y,0);
 			}
 			catch (std::exception e) {
 				std::cout << "Invalid Argument: " << line << std::endl;
@@ -184,8 +188,9 @@ int ImageProcessor::compareToBaseline()
 		for (auto const &it1 : baseline)
 		{
 
-			Region val = calc[it1.first];
-			value = it1.second.compare(val);
+			Region *newval = calc[it1.first];
+			Region *baseval = it1.second;
+			value =	baseval->compare(*newval);
 			if (value > error)
 			{
 				error = value;

@@ -50,7 +50,7 @@ bool Region::isNull() const
 	return false;
 }
 
-double Region::compare(const Region val) const
+double Region::compare(const Region &val) const
 {
 	if (this->isNull() && val.isNull()) {
 		return 0;

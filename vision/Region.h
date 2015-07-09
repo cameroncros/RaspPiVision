@@ -22,7 +22,7 @@ public:
 	void setY(double y);
 	void setSize(double size);
 	bool isNull() const;
-	double compare(const Region val) const;
+	double compare(const Region &val) const;
 };
 
 #endif /* REGION_H_ */

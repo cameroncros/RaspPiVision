@@ -17,7 +17,7 @@ RGBProcessor::~RGBProcessor() {
 	// TODO Auto-generated destructor stub
 }
 
-Region RGBProcessor::processFrame(cv::Mat frame) {
+Region *RGBProcessor::processFrame(cv::Mat &frame) {
 	long sumX = 0, sumY = 0, totalBlue = 0;
 	for (int i = 0; i<frame.rows; i++)
 	{
@@ -33,11 +33,14 @@ Region RGBProcessor::processFrame(cv::Mat frame) {
 
 		}
 	}
-	if (totalBlue > 1) {
-		return Region(sumX/totalBlue, sumY/totalBlue, totalBlue);
-	} else {
-		return Region(-1,-1,-1);
+	if (foundRegion == NULL) {
+		delete(foundRegion);
+		foundRegion = NULL;
 	}
+	if (totalBlue > 1) {
+		foundRegion = new Region(sumX/totalBlue, sumY/totalBlue, totalBlue);
+	}
+	return foundRegion;
 
 }
 
