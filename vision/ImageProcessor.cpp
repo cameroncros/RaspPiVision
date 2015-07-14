@@ -11,24 +11,27 @@
 #include <vector>
 #include <stdio.h>
 
+//#define GUI
+
 ImageProcessor::ImageProcessor(cv::VideoCapture &capture) {
 	this->capture = &capture;
+	foundRegion = NULL;
 	black = cv::Vec3b(0,0,0);
 	minTime = INT32_MAX;
 	maxTime = INT32_MIN;
 }
 
 ImageProcessor::~ImageProcessor() {
-	for (auto val : calc) {
-		if (val.second != NULL) {
-			delete(val.second);
-		}
-	}
-	for (auto val : baseline) {
-		if (val.second != NULL) {
-			delete(val.second);
-		}
-	}
+//	for (auto val : calc) {
+//		if (val.second != NULL) {
+// 			delete(val.second);
+//		}
+//	}
+//	for (auto val : baseline) {
+//		if (val.second != NULL) {
+//			delete(val.second);
+//		}
+//	}
 }
 
 void ImageProcessor::process(int maxFrames) {
@@ -41,7 +44,8 @@ void ImageProcessor::process(int maxFrames) {
 			break;
 		}
 		clock_t t = clock();
-		calc[z] = processFrame(frame);
+		Region *val = processFrame(frame);
+		calc[z] = val;
 		//printCentre(z, calc[z]);
 		difftime = clock()-t;
 		totalTime += difftime;
@@ -53,7 +57,7 @@ void ImageProcessor::process(int maxFrames) {
 		}
 
 		numFrames++;
-		drawFrame(frame, angle(frame, *calc[z]), distance(frame, *calc[z]));
+		drawFrame(frame, angle(frame, *val), distance(frame, *val));
 		processKeys(frame);
 	}
 }
@@ -93,8 +97,8 @@ void ImageProcessor::drawArrow(cv::Mat &frame, double angle,
 	start.x = frame.cols/2;
 	start.y = frame.rows/2;
 
-	finish.x = frame.cols/2+dist*cos(angle);
-	finish.y = frame.rows/2+dist*sin(angle);
+	finish.x = frame.cols/2+dist*cos(angle*M_PI/180);
+	finish.y = frame.rows/2+dist*sin(angle*M_PI/180);
 
 	cv::line(frame, start, finish, cv::Scalar(128,128,128), 10);
 }
