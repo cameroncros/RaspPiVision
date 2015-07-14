@@ -12,7 +12,7 @@
 
 class HSVProcessor: public ImageProcessor {
 public:
-	HSVProcessor(cv::VideoCapture capture);
+	HSVProcessor(cv::VideoCapture &capture);
 	virtual ~HSVProcessor();
 
 	Region *processFrame(cv::Mat &frame);

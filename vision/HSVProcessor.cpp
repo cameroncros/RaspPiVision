@@ -8,7 +8,7 @@
 #include "HSVProcessor.h"
 #include <iostream>
 
-HSVProcessor::HSVProcessor(cv::VideoCapture capture) : ImageProcessor::ImageProcessor(capture) {
+HSVProcessor::HSVProcessor(cv::VideoCapture &capture) : ImageProcessor::ImageProcessor(capture) {
 	// TODO Auto-generated constructor stub
 	methodType = "HSVBasic";
 
