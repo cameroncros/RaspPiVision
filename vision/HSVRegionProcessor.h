@@ -8,15 +8,14 @@
 #ifndef HSVREGIONPROCESSOR_H_
 #define HSVREGIONPROCESSOR_H_
 
-#include "ImageProcessor.h"
+#include "HSVProcessor.h"
 
-class HSV_Region_Processor: public ImageProcessor {
+class HSV_Region_Processor: public HSVProcessor {
 public:
-	HSV_Region_Processor(cv::VideoCapture capture);
+	HSV_Region_Processor(cv::VideoCapture &capture);
 	virtual ~HSV_Region_Processor();
 
 	Region *processFrame(cv::Mat &frame);
-	bool isBlue(cv::Vec3b point);
 
 private:
 	Region *findRegion(cv::Mat &frame, int i, int j);

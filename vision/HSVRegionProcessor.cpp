@@ -8,7 +8,7 @@
 #include "HSVRegionProcessor.h"
 #include <queue>
 
-HSV_Region_Processor::HSV_Region_Processor(cv::VideoCapture capture) : ImageProcessor::ImageProcessor(capture) {
+HSV_Region_Processor::HSV_Region_Processor(cv::VideoCapture &capture) : HSVProcessor::HSVProcessor(capture) {
 	// TODO Auto-generated constructor stub
 	methodType = "HSVRegion";
 }
@@ -53,14 +53,6 @@ Region *HSV_Region_Processor::processFrame(cv::Mat &frame)
 	}
 	delete(regionList);
 	return foundRegion;
-}
-
-bool HSV_Region_Processor::isBlue(cv::Vec3b point)
-{
-	if (point[0] < 140 && point[0] > 100) {
-		return true;
-	}
-	return false;
 }
 
 Region *HSV_Region_Processor::findRegion(cv::Mat &frame, int i, int j) {
