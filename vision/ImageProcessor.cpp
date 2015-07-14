@@ -181,7 +181,7 @@ void ImageProcessor::loadBenchmark(std::string benchfile)
 				double y = std::stod(line);
 				baseline[lineNo] = new Region(x,y,0);
 			}
-			catch (std::exception e) {
+			catch (std::exception &e) {
 				std::cout << "Invalid Argument: " << line << std::endl;
 			}
 
