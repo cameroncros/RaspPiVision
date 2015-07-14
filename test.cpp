@@ -26,6 +26,7 @@
 #include "vision/ImageProcessor.h"
 #include "vision/RGBProcessor.h"
 #include "vision/HSVProcessor.h"
+#include "vision/HSVRegionProcessor.h"
 
 void help(char** av) {
 	std::cout << "\nThis program justs gets you started reading images from video\n"
@@ -70,8 +71,13 @@ int main(int ac, char** av) {
 	{
 		proc = new HSVProcessor(capture);
 	}
+	else if (std::string(av[2]).compare("HSVRegion") == 0)
+	{
+		proc = new HSV_Region_Processor(capture);
+	}
 	proc->process(numFrames);
 	proc->loadBenchmark(av[4]);
 	proc->printReport();
+	delete(proc);
 	return 0;
 }

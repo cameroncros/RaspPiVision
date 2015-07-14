@@ -7,7 +7,9 @@
 
 #include "Region.h"
 
-#include <math.h>
+#include <cmath>
+#include <cstddef>
+
 
 Region::Region() {
 	this->x = -1;
@@ -42,17 +44,9 @@ void Region::setY(double y)
 	this->y=y;
 }
 
-bool Region::isNull() const
-{
-	if (x == -1 && y == -1) {
-		return true;
-	}
-	return false;
-}
-
 double Region::compare(const Region &val) const
 {
-	if (this->isNull() && val.isNull()) {
+	if (&val == NULL) {
 		return 0;
 	}
 	double xdiff = x-val.getX();
@@ -61,7 +55,7 @@ double Region::compare(const Region &val) const
 }
 
 double Region::getSize() const {
-	return size;
+ 	return size;
 }
 
 void Region::setSize(double size) {

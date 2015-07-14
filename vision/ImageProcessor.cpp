@@ -19,7 +19,16 @@ ImageProcessor::ImageProcessor(cv::VideoCapture &capture) {
 }
 
 ImageProcessor::~ImageProcessor() {
-	// TODO Auto-generated destructor stub
+	for (auto val : calc) {
+		if (val.second != NULL) {
+			delete(val.second);
+		}
+	}
+	for (auto val : baseline) {
+		if (val.second != NULL) {
+			delete(val.second);
+		}
+	}
 }
 
 void ImageProcessor::process(int maxFrames) {
@@ -190,7 +199,9 @@ int ImageProcessor::compareToBaseline()
 
 			Region *newval = calc[it1.first];
 			Region *baseval = it1.second;
-			value =	baseval->compare(*newval);
+			if (newval != NULL && baseval != NULL) {
+				value =	baseval->compare(*newval);
+			}
 			if (value > error)
 			{
 				error = value;
