@@ -71,11 +71,12 @@ Region *HSV_Region_Processor::findRegion(cv::Mat &frame, int i, int j) {
 
 	while(pointList->size() != 0) {
 		cv::Point *temp = pointList->front();
-		if (isBlue(frame.at<cv::Vec3b>(*temp))) {
+		cv::Vec3b &point = frame.at<cv::Vec3b>(*temp);
+		if (isBlue(point)) {
 			sumX += i;
 			sumY += j;
 			totalBlue++;
-			frame.at<cv::Vec3b>(*temp)=black;
+			point=black;
 			pointList->push(new cv::Point(temp->x+1, temp->y));
 			pointList->push(new cv::Point(temp->x-1, temp->y));
 			pointList->push(new cv::Point(temp->x, temp->y+1));
