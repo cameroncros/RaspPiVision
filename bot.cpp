@@ -7,7 +7,7 @@
 
 #include "robot/BotController.h"
 #include "vision/ImageProcessor.h"
-#include "vision/HSVProcessor.h"
+#include "vision/HSVRegionProcessor.h"
 #include <unistd.h>
 #include <iostream>
 #include <signal.h>
@@ -34,16 +34,16 @@ int main(int argc, char **argv)
                 return 1;
         }
 
-	ImageProcessor *ip = new HSVProcessor(capture);
+	ImageProcessor *ip = new HSV_Region_Processor(capture);
 	BotController *bt = new BotController();
-	Region dp;
+	Region *dp;
 	cv::Mat frame;
 	while (keepRunning) {
 		capture >> frame;
 		dp = ip->processFrame(frame);
-		if (dp.getX() != -1 && dp.getY() != -1 && dp.getSize() > 100) {
-			double angle = ip->angle(frame, dp);
-			double distance = ip->distance(frame, dp);
+		if (dp->getX() != -1 && dp->getY() != -1 && dp->getSize() > 100) {
+			double angle = ip->angle(frame, *dp);
+			double distance = ip->distance(frame, *dp);
 			std::cout << angle << " - " << distance << std::endl;
 			bt->move(angle, distance);
 			ip->drawArrow(frame, angle, distance);
