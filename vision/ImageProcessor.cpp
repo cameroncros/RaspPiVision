@@ -19,6 +19,8 @@ ImageProcessor::ImageProcessor(cv::VideoCapture &capture) {
 	black = cv::Vec3b(0,0,0);
 	minTime = INT32_MAX;
 	maxTime = INT32_MIN;
+	totalTime = 0;
+	numFrames = 0;
 }
 
 ImageProcessor::~ImageProcessor() {
