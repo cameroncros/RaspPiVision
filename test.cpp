@@ -27,6 +27,7 @@
 #include "vision/RGBProcessor.h"
 #include "vision/HSVProcessor.h"
 #include "vision/HSVRegionProcessor.h"
+#include "vision/HSVRegionProcessorMinAlloc.h"
 
 void help(char** av) {
 	std::cout << "\nThis program justs gets you started reading images from video\n"
@@ -74,6 +75,10 @@ int main(int ac, char** av) {
 	else if (std::string(av[2]).compare("HSVRegion") == 0)
 	{
 		proc = new HSV_Region_Processor(capture);
+	}
+	else if (std::string(av[2]).compare("HSVRegionMinAlloc") == 0)
+	{
+		proc = new HSV_Region_Processor_Min_Alloc(capture);
 	}
 	proc->process(numFrames);
 	proc->loadBenchmark(av[4]);
