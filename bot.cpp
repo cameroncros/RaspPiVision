@@ -7,7 +7,7 @@
 
 #include "robot/BotController.h"
 #include "vision/ImageProcessor.h"
-#include "vision/HSVRegionProcessor.h"
+#include "vision/HSVRegionProcessorMinAlloc.h"
 #include <unistd.h>
 #include <iostream>
 #include <signal.h>
@@ -26,7 +26,7 @@ int main(int argc, char **argv)
 	signal(SIGINT, intHandler);
 
 	std::string arg = argv[1];
- 	cv::VideoCapture capture(arg); //try to open string, this will attempt 
+ 	cv::VideoCapture capture(arg); //try to open string, this will attempt
         if (!capture.isOpened()) //if this fails, try to open as a video camera
                 capture.open(atoi(arg.c_str()));
         if (!capture.isOpened()) {
@@ -34,7 +34,7 @@ int main(int argc, char **argv)
                 return 1;
         }
 
-	ImageProcessor *ip = new HSV_Region_Processor(capture);
+	ImageProcessor *ip = new HSV_Region_Processor_Min_Alloc(capture);
 	BotController *bt = new BotController();
 	Region *dp;
 	cv::Mat frame;
