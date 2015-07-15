@@ -69,10 +69,10 @@ Region *HSV_Region_Processor::findRegion(cv::Mat &frame, int i, int j) {
 			sumY += j;
 			totalBlue++;
 			point=black;
-			pointList->push(new cv::Point(temp->x+1, temp->y));
-			pointList->push(new cv::Point(temp->x-1, temp->y));
-			pointList->push(new cv::Point(temp->x, temp->y+1));
-			pointList->push(new cv::Point(temp->x, temp->y-1));
+			if (temp->x != frame.rows-1) {pointList->push(new cv::Point(temp->x+1, temp->y));};
+			if (temp->x != 0           ) {pointList->push(new cv::Point(temp->x-1, temp->y));};
+			if (temp->y != frame.cols-1) {pointList->push(new cv::Point(temp->x, temp->y+1));};
+			if (temp->y != 0           ) {pointList->push(new cv::Point(temp->x, temp->y-1));};
 		}
 		delete(temp);
 		pointList->pop();

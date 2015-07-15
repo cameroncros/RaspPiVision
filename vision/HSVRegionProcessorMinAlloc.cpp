@@ -55,10 +55,10 @@ void HSV_Region_Processor_Min_Alloc::findRegion(cv::Mat &frame, int i, int j, do
 			sumY += j;
 			regSize++;
 			point=black;
-			pointList->append(tempX+1, tempY);
-			pointList->append(tempX-1, tempY);
-			pointList->append(tempX, tempY+1);
-			pointList->append(tempX, tempY-1);
+			if (tempX != frame.rows-1) {pointList->append(tempX+1, tempY);};
+			if (tempX != 0           ) {pointList->append(tempX-1, tempY);};
+			if (tempY != frame.cols-1) {pointList->append(tempX, tempY+1);};
+			if (tempY != 0           ) {pointList->append(tempX, tempY-1);};
 		}
 		pointList->pop();
 	}
