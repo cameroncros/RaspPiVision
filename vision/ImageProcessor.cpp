@@ -225,7 +225,7 @@ void ImageProcessor::printReport()
 	std::cout << "Average Frame Time (ms): " << (totalTime/(CLOCKS_PER_SEC/1000))/numFrames << std::endl;
 	std::cout << "Minimum Frame Time (ms): " << minTime/(CLOCKS_PER_SEC/1000) << std::endl;
 	std::cout << "Maximum Frame Time (ms): " << maxTime/(CLOCKS_PER_SEC/1000) << std::endl;
-	compareToBaseline();
+//	compareToBaseline();
 	std::cout << std::endl;
 
 
