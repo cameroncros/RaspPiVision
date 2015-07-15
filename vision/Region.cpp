@@ -14,6 +14,7 @@
 Region::Region() {
 	this->x = -1;
 	this->y = -1;
+	this->size = -1;
 }
 
 Region::Region(double x, double y, double size) {
