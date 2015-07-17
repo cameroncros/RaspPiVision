@@ -21,7 +21,7 @@ HSVProcessor::~HSVProcessor() {
 Region *HSVProcessor::processFrame(cv::Mat &frame)
 {
 	cv::Mat hsvFrame;
-	cv::cvtColor(frame, hsvFrame, cv::COLOR_BGR2HSV_FULL);
+	cv::cvtColor(frame, hsvFrame, cv::COLOR_BGR2HSV);
 			long sumX = 0, sumY = 0, totalBlue = 0;
 			for (int i = 0; i<hsvFrame.rows; i++)
 			{
@@ -45,12 +45,13 @@ Region *HSVProcessor::processFrame(cv::Mat &frame)
 			if (totalBlue > 1) {
 				foundRegion = new Region(sumX/totalBlue, sumY/totalBlue, totalBlue);
 			}
+			frame = hsvFrame;
 			return foundRegion;
 }
 
 bool HSVProcessor::isBlue(cv::Vec3b point)
 {
-	if (point[0] < 140 && point[0] > 100) {
+	if (point[1] > 70 && point[0] < 140 && point[0] > 100) {
 		return true;
 	}
 	return false;
