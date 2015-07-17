@@ -59,7 +59,10 @@ void ImageProcessor::process(int maxFrames) {
 		}
 
 		numFrames++;
-		drawFrame(frame, angle(frame, *val), distance(frame, *val));
+		if (!val->isNull()) {
+			drawArrow(frame, angle(frame, *val), distance(frame, *val));
+		}
+		drawFrame(frame);
 		processKeys(frame);
 	}
 }
@@ -105,10 +108,9 @@ void ImageProcessor::drawArrow(cv::Mat &frame, double angle,
 	cv::line(frame, start, finish, cv::Scalar(128,128,128), 10);
 }
 
-void ImageProcessor::drawFrame(cv::Mat &frame, double angle, double dist)
+void ImageProcessor::drawFrame(cv::Mat &frame)
 {
 #ifdef GUI
-	drawArrow(frame, angle, dist);
 	cv::imshow(window_name, frame);
 #endif
 }

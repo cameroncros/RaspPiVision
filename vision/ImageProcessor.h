@@ -43,7 +43,7 @@ public:
 	virtual Region *processFrame(cv::Mat &frame)=0;
 	void printCentre(int line, Region &val);
 	void drawArrow(cv::Mat &frame, double angle, double dist);
-	void drawFrame(cv::Mat &frame, double angle, double dist);
+	void drawFrame(cv::Mat &frame);
 	void saveFrame(const cv::Mat& frame);
 	void processKeys(cv::Mat &frame);
 	void initialiseWindow();
