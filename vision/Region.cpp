@@ -62,7 +62,3 @@ double Region::getSize() const {
 void Region::setSize(double size) {
 	this->size = size;
 }
-
-bool Region::isNull() const {
-	return (x == -1 && y == -1);
-}

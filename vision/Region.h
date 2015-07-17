@@ -21,7 +21,6 @@ public:
 	void setX(double x);
 	void setY(double y);
 	void setSize(double size);
-	bool isNull() const;
 	double compare(const Region &val) const;
 };
 

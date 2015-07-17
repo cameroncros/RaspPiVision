@@ -59,7 +59,7 @@ void ImageProcessor::process(int maxFrames) {
 		}
 
 		numFrames++;
-		if (!val->isNull()) {
+		if (val != NULL) {
 			drawArrow(frame, angle(frame, *val), distance(frame, *val));
 		}
 		drawFrame(frame);

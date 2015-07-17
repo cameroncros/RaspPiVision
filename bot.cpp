@@ -42,7 +42,7 @@ int main(int argc, char **argv)
 	while (keepRunning) {
 		capture >> frame;
 		dp = ip->processFrame(frame);
-		if (!dp->isNull() && dp->getSize() > 100) {
+		if (dp != NULL && dp->getSize() > 100) {
 			double angle = ip->angle(frame, *dp);
 			double distance = ip->distance(frame, *dp);
 			std::cout << angle << " - " << distance << std::endl;
