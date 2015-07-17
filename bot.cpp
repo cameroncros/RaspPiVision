@@ -38,20 +38,25 @@ int main(int argc, char **argv)
 	BotController *bt = new BotController();
 	Region *dp;
 	cv::Mat frame;
+	ip->initialiseWindow();
 	while (keepRunning) {
 		capture >> frame;
 		dp = ip->processFrame(frame);
-		if (dp->getX() != -1 && dp->getY() != -1 && dp->getSize() > 100) {
+		if (!dp->isNull() && dp->getSize() > 100) {
 			double angle = ip->angle(frame, *dp);
 			double distance = ip->distance(frame, *dp);
 			std::cout << angle << " - " << distance << std::endl;
 			bt->move(angle, distance);
 			ip->drawArrow(frame, angle, distance);
-			ip->saveFrame(frame);
+
+			//ip->saveFrame(frame);
 		} else {
 			std::cout << "No object found, sitting still" << std::endl;
 			bt->stop();
 		}
+		ip->drawFrame(frame);
+		cv::waitKey(5);
+//		ip->processKeys(frame);
 	}
 	std::cout << "Shutting down" << std::endl;
 	bt->stop();
