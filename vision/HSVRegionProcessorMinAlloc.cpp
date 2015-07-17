@@ -21,7 +21,7 @@ HSV_Region_Processor_Min_Alloc::~HSV_Region_Processor_Min_Alloc() {
 Region *HSV_Region_Processor_Min_Alloc::processFrame(cv::Mat &frame)
 {
 	cv::Mat hsvFrame;
-	cv::cvtColor(frame, hsvFrame, cv::COLOR_BGR2HSV_FULL);
+	cv::cvtColor(frame, hsvFrame, cv::COLOR_BGR2HSV);
 	double regX=0, regY=0, regSize=0;
 	regionList->reset();
 	for (int i = 0; i<hsvFrame.rows; i++)
@@ -38,6 +38,7 @@ Region *HSV_Region_Processor_Min_Alloc::processFrame(cv::Mat &frame)
 
 		}
 	}
+	frame = hsvFrame;
 	return regionList->findLargest();
 }
 
@@ -51,8 +52,8 @@ void HSV_Region_Processor_Min_Alloc::findRegion(cv::Mat &frame, int i, int j, do
 		int tempY = pointList->getY();
 		cv::Vec3b &point = frame.at<cv::Vec3b>(tempX, tempY);
 		if (isBlue(point)) {
-			sumX += i;
-			sumY += j;
+			sumX += tempX;
+			sumY += tempY;
 			regSize++;
 			point=black;
 			if (tempX != frame.rows-1) {pointList->append(tempX+1, tempY);};

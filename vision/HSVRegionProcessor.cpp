@@ -20,7 +20,7 @@ HSV_Region_Processor::~HSV_Region_Processor() {
 Region *HSV_Region_Processor::processFrame(cv::Mat &frame)
 {
 	cv::Mat hsvFrame;
-	cv::cvtColor(frame, hsvFrame, cv::COLOR_BGR2HSV_FULL);
+	cv::cvtColor(frame, hsvFrame, cv::COLOR_BGR2HSV);
 
 	std::vector<Region *> *regionList = new std::vector<Region *>();
 
@@ -51,6 +51,7 @@ Region *HSV_Region_Processor::processFrame(cv::Mat &frame)
 			delete(reg);
 		}
 	}
+	frame = hsvFrame;
 	delete(regionList);
 	return foundRegion;
 }
@@ -65,8 +66,8 @@ Region *HSV_Region_Processor::findRegion(cv::Mat &frame, int i, int j) {
 		cv::Point *temp = pointList->front();
 		cv::Vec3b &point = frame.at<cv::Vec3b>(*temp);
 		if (isBlue(point)) {
-			sumX += i;
-			sumY += j;
+			sumX += temp->x;
+			sumY += temp->y;
 			totalBlue++;
 			point=black;
 			if (temp->x != frame.cols-1) {pointList->push(new cv::Point(temp->x+1, temp->y));};
