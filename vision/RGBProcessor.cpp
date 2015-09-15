@@ -24,8 +24,8 @@ Region *RGBProcessor::processFrame(cv::Mat &frame) {
 		for (int j = 0; j<frame.cols; j++)
 		{
 			if (isBlue(frame.at<cv::Vec3b>(i, j))) {
-				sumX += i;
-				sumY += j;
+				sumY += i;
+				sumX += j;
 				totalBlue++;
 			} else {
 				frame.at<cv::Vec3b>(i, j)=black;

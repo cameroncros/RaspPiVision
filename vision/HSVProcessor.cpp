@@ -29,8 +29,8 @@ Region *HSVProcessor::processFrame(cv::Mat &frame)
 				{
 
 					if (isBlue(hsvFrame.at<cv::Vec3b>(i, j))) {
-						sumX += i;
-						sumY += j;
+						sumY += i;
+						sumX += j;
 						totalBlue++;
 					} else {
 						frame.at<cv::Vec3b>(i, j)=black;

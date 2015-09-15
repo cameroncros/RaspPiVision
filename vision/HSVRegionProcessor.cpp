@@ -21,7 +21,6 @@ Region *HSV_Region_Processor::processFrame(cv::Mat &frame)
 {
 	cv::Mat hsvFrame;
 	cv::cvtColor(frame, hsvFrame, cv::COLOR_BGR2HSV);
-
 	std::vector<Region *> *regionList = new std::vector<Region *>();
 
 	for (int i = 0; i<hsvFrame.rows; i++)

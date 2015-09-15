@@ -18,16 +18,16 @@ HoughCircleDetection::~HoughCircleDetection() {
 }
 
 Region* HoughCircleDetection::processFrame(cv::Mat& frame) {
-	//code taken from
+	//code taken from http://docs.opencv.org/doc/tutorials/imgproc/imgtrans/hough_circle/hough_circle.html
 	cvtColor(frame, frame, CV_BGR2GRAY);
 	GaussianBlur(frame, frame, cv::Size(9, 9), 2, 2);
 	cv::vector<cv::Vec3f> circles;
 	HoughCircles(frame, circles, CV_HOUGH_GRADIENT, 1, frame.rows/8, 200, 100, 0, 0 );
 
-	int maxRadius = 0;
-	int x, y;
+	double maxRadius = 0;
+	double x, y;
 
-	for (int i = 0; i < circles.size(); i++) {
+	for (unsigned int i = 0; i < circles.size(); i++) {
 		int radius = circles[i][2];
 		if (radius > maxRadius) {
 			maxRadius = radius;
