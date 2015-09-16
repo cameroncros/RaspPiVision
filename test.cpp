@@ -28,6 +28,8 @@
 #include "vision/HSVProcessor.h"
 #include "vision/HSVRegionProcessor.h"
 #include "vision/HSVRegionProcessorMinAlloc.h"
+#include "vision/HoughCircleDetection.h"
+#include "vision/BasicShapeDetection.h"
 
 void help(char** av) {
 	std::cout << "\nThis program justs gets you started reading images from video\n"
@@ -80,6 +82,15 @@ int main(int ac, char** av) {
 	{
 		proc = new HSV_Region_Processor_Min_Alloc(capture);
 	}
+	else if (std::string(av[2]).compare("HoughCircleDetection") == 0)
+	{
+		proc = new HoughCircleDetection(capture);
+	}
+	else if (std::string(av[2]).compare("BasicShapeDetection") == 0)
+	{
+		proc = new BasicShapeDetection(capture);
+	}
+
 	proc->process(numFrames);
 	proc->loadBenchmark(av[4]);
 	proc->printReport();

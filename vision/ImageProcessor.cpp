@@ -72,8 +72,8 @@ double ImageProcessor::distance(cv::Mat &frame, Region &var)
 	if (&var == NULL) {
 		return 0;
 	}
-	double xcoord = var.getX()-frame.rows/2;
-	double ycoord = var.getY()-frame.cols/2;
+	double xcoord = var.getX()-frame.cols/2;
+	double ycoord = var.getY()-frame.rows/2;
 
 	return sqrt(xcoord*xcoord+ycoord*ycoord);
 }
@@ -83,10 +83,10 @@ double ImageProcessor::angle(cv::Mat &frame, Region &var)
 	if (&var == NULL) {
 		return 0;
 	}
-	double xcoord = var.getX()-frame.rows/2;
-	double ycoord = var.getY()-frame.cols/2;
+	double xcoord = var.getX()-frame.cols/2;
+	double ycoord = var.getY()-frame.rows/2;
 
-	return atan2(xcoord, ycoord)*180/M_PI;
+	return atan2(ycoord, xcoord)*180/M_PI;
 }
 
 void ImageProcessor::printCentre(int line, Region &val)
@@ -133,6 +133,7 @@ void ImageProcessor::processKeys(cv::Mat &frame)
 		case 'Q':
 		case 27: //escape key
 			exit;
+			break;
 		case 's': //Save an image
 			saveFrame(frame);
 			break;
