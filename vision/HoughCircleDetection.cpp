@@ -26,6 +26,9 @@ Region* HoughCircleDetection::processFrame(cv::Mat& frame) {
 
 	double maxRadius = 0;
 	double x, y;
+	if (circles.size() == 0) {
+		return NULL;
+	}
 
 	for (unsigned int i = 0; i < circles.size(); i++) {
 		int radius = circles[i][2];
