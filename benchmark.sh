@@ -2,3 +2,5 @@
 ./test ./tests/blueball.avi HSVBasic 1000 ./tests/blueball.txt
 ./test ./tests/blueball.avi HSVRegion 1000 ./tests/blueball.txt
 ./test ./tests/blueball.avi HSVRegionMinAlloc 1000 ./tests/blueball.txt
+./test ./tests/blueball.avi HoughCircleDetection 1000 ./tests/blueball.txt
+./test ./tests/blueball.avi BasicShapeDetection 1000 ./tests/blueball.txt
