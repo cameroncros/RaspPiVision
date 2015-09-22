@@ -23,10 +23,10 @@ void HSV_Region_Processor_Min_Alloc::processFrame(cv::Mat &frame, std::vector<Re
 	double regX=0, regY=0, regSize=0;
 	for (int i = 0; i<hsvFrame.rows; i++)
 	{
+		const cv::Vec3b* row = hsvFrame.ptr<cv::Vec3b>(i);
 		for (int j = 0; j<hsvFrame.cols; j++)
 		{
-
-			if (isBlue(hsvFrame.at<cv::Vec3b>(i, j))) {
+			if (isBlue(row[j])) {
 				findRegion(hsvFrame, i, j, regX, regY, regSize);
 				if (regSize != -1) {
 					regionList.push_back(new Region(regX, regY, regSize));
@@ -45,7 +45,8 @@ void HSV_Region_Processor_Min_Alloc::findRegion(cv::Mat &frame, int i, int j, do
 	while(pointList->size() != 0) {
 		int tempX = pointList->getX();
 		int tempY = pointList->getY();
-		cv::Vec3b &point = frame.at<cv::Vec3b>(tempX, tempY);
+
+		cv::Vec3b &point = frame.ptr<cv::Vec3b>(tempX)[tempY];
 		if (isBlue(point)) {
 			sumX += tempX;
 			sumY += tempY;

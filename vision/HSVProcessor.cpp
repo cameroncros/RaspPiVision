@@ -27,7 +27,6 @@ void HSVProcessor::processFrame(cv::Mat &frame, std::vector<Region *> &regionLis
 	{
 		for (int j = 0; j<hsvFrame.cols; j++)
 		{
-
 			if (isBlue(hsvFrame.at<cv::Vec3b>(i, j))) {
 				sumX += i;
 				sumY += j;
@@ -35,7 +34,6 @@ void HSVProcessor::processFrame(cv::Mat &frame, std::vector<Region *> &regionLis
 			} else {
 				frame.at<cv::Vec3b>(i, j)=black;
 			}
-
 		}
 	}
 	regionList.push_back(new Region(sumX/totalBlue, sumY/totalBlue, totalBlue));
