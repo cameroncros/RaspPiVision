@@ -15,7 +15,7 @@ public:
 	HSV_Region_Processor(cv::VideoCapture &capture);
 	virtual ~HSV_Region_Processor();
 
-	Region *processFrame(cv::Mat &frame);
+	void processFrame(cv::Mat &frame, std::vector<Region *> &regionList);
 
 private:
 	Region *findRegion(cv::Mat &frame, int i, int j);

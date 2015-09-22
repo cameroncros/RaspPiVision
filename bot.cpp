@@ -39,9 +39,12 @@ int main(int argc, char **argv)
 	Region *dp;
 	cv::Mat frame;
 	ip->initialiseWindow();
+	std::vector<Region *> *regionList = new std::vector<Region *>();
 	while (keepRunning) {
 		capture >> frame;
-		dp = ip->processFrame(frame);
+		ip->processFrame(frame, *regionList);
+		std::sort(regionList->begin(), regionList->end(), compareBySize);
+		dp = (*regionList)[0];
 		if (dp != NULL && dp->getSize() > 100) {
 			double angle = ip->angle(frame, *dp);
 			double distance = ip->distance(frame, *dp);

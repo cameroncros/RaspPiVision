@@ -40,7 +40,7 @@ public:
 	void process(int numFrames);
 	double distance(cv::Mat &frame, Region &var);
 	double angle(cv::Mat &frame, Region &var);
-	virtual Region *processFrame(cv::Mat &frame)=0;
+	virtual void processFrame(cv::Mat &frame, std::vector<Region *> &regionList)=0;
 	void printCentre(int line, Region &val);
 	void drawArrow(cv::Mat &frame, double angle, double dist);
 	void drawFrame(cv::Mat &frame);
@@ -51,5 +51,8 @@ public:
 	int compareToBaseline();
 	void printReport();
 };
+
+
+bool compareBySize(const Region *a, const Region *b);
 
 #endif /* IMAGEPROCESSOR_H_ */

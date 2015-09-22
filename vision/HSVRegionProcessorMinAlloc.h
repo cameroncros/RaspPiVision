@@ -11,16 +11,14 @@
 #include "HSVRegionProcessor.h"
 
 #include "PointQueue.h"
-#include "RegionQueue.h"
 #include "Region.h"
 
 class HSV_Region_Processor_Min_Alloc: public HSV_Region_Processor {
 	PointQueue *pointList;
-	RegionQueue *regionList;
 public:
 	HSV_Region_Processor_Min_Alloc(cv::VideoCapture &capture);
 	virtual ~HSV_Region_Processor_Min_Alloc();
-	Region *processFrame(cv::Mat &frame);
+	void processFrame(cv::Mat &frame, std::vector<Region *> &regionList);
 private:
 	void findRegion(cv::Mat &frame, int i, int j, double &regX, double &regY, double &regSize);
 

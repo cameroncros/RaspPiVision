@@ -13,6 +13,7 @@
 
 //#define GUI
 
+
 ImageProcessor::ImageProcessor(cv::VideoCapture &capture) {
 	this->capture = &capture;
 	foundRegion = NULL;
@@ -38,7 +39,8 @@ ImageProcessor::~ImageProcessor() {
 
 void ImageProcessor::process(int maxFrames) {
 	initialiseWindow();
-	cv::Mat frame, hsvFrame;
+	cv::Mat frame;
+	std::vector<Region *> *regionList = new std::vector<Region *>();
 	long difftime;
 	for (int z = 0; z < maxFrames; z++) {
 		*capture >> frame;
@@ -46,8 +48,10 @@ void ImageProcessor::process(int maxFrames) {
 			break;
 		}
 		clock_t t = clock();
-		Region *val = processFrame(frame);
-		calc[z] = val;
+		regionList->clear();
+		processFrame(frame, *regionList);
+		std::sort(regionList->begin(), regionList->end(), compareBySize);
+		calc[z] = (*regionList)[0];
 		//printCentre(z, calc[z]);
 		difftime = clock()-t;
 		totalTime += difftime;
@@ -59,8 +63,8 @@ void ImageProcessor::process(int maxFrames) {
 		}
 
 		numFrames++;
-		if (val != NULL) {
-			drawArrow(frame, angle(frame, *val), distance(frame, *val));
+		if (calc[z] != NULL) {
+			drawArrow(frame, angle(frame, *calc[z]), distance(frame, *calc[z]));
 		}
 		drawFrame(frame);
 		processKeys(frame);
@@ -229,7 +233,8 @@ void ImageProcessor::printReport()
 	std::cout << "Maximum Frame Time (ms): " << maxTime/(CLOCKS_PER_SEC/1000) << std::endl;
 //	compareToBaseline();
 	std::cout << std::endl;
+}
 
-
-
+bool compareBySize(const Region *a, const Region *b) {
+	return a->getSize() > b->getSize();
 }

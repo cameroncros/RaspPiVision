@@ -10,20 +10,17 @@
 HSV_Region_Processor_Min_Alloc::HSV_Region_Processor_Min_Alloc(cv::VideoCapture &capture) : HSV_Region_Processor::HSV_Region_Processor(capture) {
 	methodType = "HSVRegionMinAlloc";
 	pointList = new PointQueue(10000);
-	regionList = new RegionQueue(10000);
 }
 
 HSV_Region_Processor_Min_Alloc::~HSV_Region_Processor_Min_Alloc() {
 	delete(pointList);
-	delete(regionList);
 }
 
-Region *HSV_Region_Processor_Min_Alloc::processFrame(cv::Mat &frame)
+void HSV_Region_Processor_Min_Alloc::processFrame(cv::Mat &frame, std::vector<Region *> &regionList)
 {
 	cv::Mat hsvFrame;
 	cv::cvtColor(frame, hsvFrame, cv::COLOR_BGR2HSV);
 	double regX=0, regY=0, regSize=0;
-	regionList->reset();
 	for (int i = 0; i<hsvFrame.rows; i++)
 	{
 		for (int j = 0; j<hsvFrame.cols; j++)
@@ -32,14 +29,12 @@ Region *HSV_Region_Processor_Min_Alloc::processFrame(cv::Mat &frame)
 			if (isBlue(hsvFrame.at<cv::Vec3b>(i, j))) {
 				findRegion(hsvFrame, i, j, regX, regY, regSize);
 				if (regSize != -1) {
-					regionList->append(regX, regY, regSize);
+					regionList.push_back(new Region(regX, regY, regSize));
 				}
 			}
 
 		}
 	}
-	frame = hsvFrame;
-	return regionList->findLargest();
 }
 
 void HSV_Region_Processor_Min_Alloc::findRegion(cv::Mat &frame, int i, int j, double &regX, double &regY, double &regSize) {

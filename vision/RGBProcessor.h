@@ -15,7 +15,7 @@ public:
 	RGBProcessor(cv::VideoCapture capture);
 	virtual ~RGBProcessor();
 
-	Region *processFrame(cv::Mat &frame);
+	void processFrame(cv::Mat &frame, std::vector<Region *> &regionList);
 	bool isBlue(cv::Vec3b point);
 };
 
