@@ -17,7 +17,7 @@ HSV_Region_Processor::~HSV_Region_Processor() {
 	// TODO Auto-generated destructor stub
 }
 
-void HSV_Region_Processor::processFrame(cv::Mat &frame, std::vector<Region *> &regionList)
+std::vector<Region *>*  HSV_Region_Processor::processFrame(cv::Mat &frame)
 {
 	cv::Mat hsvFrame;
 	cv::cvtColor(frame, hsvFrame, cv::COLOR_BGR2HSV);
@@ -29,12 +29,13 @@ void HSV_Region_Processor::processFrame(cv::Mat &frame, std::vector<Region *> &r
 			if (isBlue(hsvFrame.at<cv::Vec3b>(i, j))) {
 				Region *region = findRegion(hsvFrame, i, j);
 				if (region != NULL) {
-					regionList.push_back(region);
+					regionList->push_back(region);
 				}
 			}
 
 		}
 	}
+	return regionList;
 }
 
 Region *HSV_Region_Processor::findRegion(cv::Mat &frame, int i, int j) {

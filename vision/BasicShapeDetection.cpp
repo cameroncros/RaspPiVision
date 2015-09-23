@@ -17,7 +17,7 @@ BasicShapeDetection::~BasicShapeDetection() {
 	// TODO Auto-generated destructor stub
 }
 
-void BasicShapeDetection::processFrame(cv::Mat& frame, std::vector<Region *> &regionList) {
+std::vector<Region *>* BasicShapeDetection::processFrame(cv::Mat& frame) {
 	//code taken from squares.cpp in opencv docs. Modified to suit.
 	double thresh = 1;
 	double N = 3;
@@ -105,11 +105,12 @@ void BasicShapeDetection::processFrame(cv::Mat& frame, std::vector<Region *> &re
 					}
 					x /= count;
 					y /= count;
-					regionList.push_back(new Region(x, y, fabs(cv::contourArea(cv::Mat(approx)))));
+					regionList->push_back(new Region(x, y, fabs(cv::contourArea(cv::Mat(approx)))));
 				}
 			}
 		}
 	}
+	return regionList;
 }
 
 // helper function:

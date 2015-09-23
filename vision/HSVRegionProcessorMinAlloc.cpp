@@ -16,7 +16,7 @@ HSV_Region_Processor_Min_Alloc::~HSV_Region_Processor_Min_Alloc() {
 	delete(pointList);
 }
 
-void HSV_Region_Processor_Min_Alloc::processFrame(cv::Mat &frame, std::vector<Region *> &regionList)
+std::vector<Region *>*  HSV_Region_Processor_Min_Alloc::processFrame(cv::Mat &frame)
 {
 	cv::Mat hsvFrame;
 	cv::cvtColor(frame, hsvFrame, cv::COLOR_BGR2HSV);
@@ -29,12 +29,13 @@ void HSV_Region_Processor_Min_Alloc::processFrame(cv::Mat &frame, std::vector<Re
 			if (isBlue(row[j])) {
 				findRegion(hsvFrame, i, j, regX, regY, regSize);
 				if (regSize != -1) {
-					regionList.push_back(new Region(regX, regY, regSize));
+					regionList->push_back(new Region(regX, regY, regSize));
 				}
 			}
 
 		}
 	}
+	return regionList;
 }
 
 void HSV_Region_Processor_Min_Alloc::findRegion(cv::Mat &frame, int i, int j, double &regX, double &regY, double &regSize) {

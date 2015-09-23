@@ -32,7 +32,7 @@ protected:
 	cv::Vec3b black;
 	long totalTime, minTime, maxTime;
 	int numFrames;
-	Region *foundRegion;
+	std::vector<Region*> *regionList;
 
 public:
 	ImageProcessor(cv::VideoCapture &capture);
@@ -40,7 +40,7 @@ public:
 	void process(int numFrames);
 	double distance(cv::Mat &frame, Region &var);
 	double angle(cv::Mat &frame, Region &var);
-	virtual void processFrame(cv::Mat &frame, std::vector<Region *> &regionList)=0;
+	virtual std::vector<Region*> *processFrame(cv::Mat &frame)=0;
 	void printCentre(int line, Region &val);
 	void drawArrow(cv::Mat &frame, double angle, double dist);
 	void drawFrame(cv::Mat &frame);
@@ -50,6 +50,7 @@ public:
 	void loadBenchmark(std::string benchfile);
 	int compareToBaseline();
 	void printReport();
+	void cleanRegionList();
 };
 
 

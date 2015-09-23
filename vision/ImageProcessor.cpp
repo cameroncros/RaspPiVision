@@ -16,12 +16,12 @@
 
 ImageProcessor::ImageProcessor(cv::VideoCapture &capture) {
 	this->capture = &capture;
-	foundRegion = NULL;
 	black = cv::Vec3b(0,0,0);
 	minTime = INT32_MAX;
 	maxTime = INT32_MIN;
 	totalTime = 0;
 	numFrames = 0;
+	regionList = new std::vector<Region *>();
 }
 
 ImageProcessor::~ImageProcessor() {
@@ -37,10 +37,16 @@ ImageProcessor::~ImageProcessor() {
 //	}
 }
 
+void ImageProcessor::cleanRegionList() {
+	for (Region* reg : *regionList) {
+		delete (reg);
+	}
+	regionList->clear();
+}
+
 void ImageProcessor::process(int maxFrames) {
 	initialiseWindow();
 	cv::Mat frame;
-	std::vector<Region *> *regionList = new std::vector<Region *>();
 	long difftime;
 	for (int z = 0; z < maxFrames; z++) {
 		*capture >> frame;
@@ -48,8 +54,9 @@ void ImageProcessor::process(int maxFrames) {
 			break;
 		}
 		clock_t t = clock();
-		regionList->clear();
-		processFrame(frame, *regionList);
+
+		cleanRegionList();
+		processFrame(frame);
 		std::sort(regionList->begin(), regionList->end(), compareBySize);
 		calc[z] = (*regionList)[0];
 		//printCentre(z, calc[z]);

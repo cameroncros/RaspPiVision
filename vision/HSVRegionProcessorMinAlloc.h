@@ -18,7 +18,7 @@ class HSV_Region_Processor_Min_Alloc: public HSV_Region_Processor {
 public:
 	HSV_Region_Processor_Min_Alloc(cv::VideoCapture &capture);
 	virtual ~HSV_Region_Processor_Min_Alloc();
-	void processFrame(cv::Mat &frame, std::vector<Region *> &regionList);
+	std::vector<Region*> * processFrame(cv::Mat &frame);
 private:
 	void findRegion(cv::Mat &frame, int i, int j, double &regX, double &regY, double &regSize);
 

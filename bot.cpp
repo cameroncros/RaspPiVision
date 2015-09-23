@@ -39,10 +39,11 @@ int main(int argc, char **argv)
 	Region *dp;
 	cv::Mat frame;
 	ip->initialiseWindow();
-	std::vector<Region *> *regionList = new std::vector<Region *>();
+	std::vector<Region *> *regionList;
 	while (keepRunning) {
 		capture >> frame;
-		ip->processFrame(frame, *regionList);
+		ip->cleanRegionList();
+		regionList = ip->processFrame(frame);
 		std::sort(regionList->begin(), regionList->end(), compareBySize);
 		dp = (*regionList)[0];
 		if (dp != NULL && dp->getSize() > 100) {

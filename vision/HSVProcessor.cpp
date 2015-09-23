@@ -18,7 +18,7 @@ HSVProcessor::~HSVProcessor() {
 	// TODO Auto-generated destructor stub
 }
 
-void HSVProcessor::processFrame(cv::Mat &frame, std::vector<Region *> &regionList)
+std::vector<Region *>*  HSVProcessor::processFrame(cv::Mat &frame)
 {
 	cv::Mat hsvFrame;
 	cv::cvtColor(frame, hsvFrame, cv::COLOR_BGR2HSV);
@@ -36,8 +36,10 @@ void HSVProcessor::processFrame(cv::Mat &frame, std::vector<Region *> &regionLis
 			}
 		}
 	}
-	regionList.push_back(new Region(sumX/totalBlue, sumY/totalBlue, totalBlue));
-
+	if (totalBlue != 0) {
+		regionList->push_back(new Region(sumX/totalBlue, sumY/totalBlue, totalBlue));
+	}
+	return regionList;
 }
 
 bool HSVProcessor::isBlue(cv::Vec3b point)

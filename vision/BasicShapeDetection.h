@@ -17,7 +17,7 @@ public:
 	BasicShapeDetection(cv::VideoCapture &capture);
 	virtual ~BasicShapeDetection();
 
-	void processFrame(cv::Mat &frame, std::vector<Region *> &regionList);
+	std::vector<Region *>* processFrame(cv::Mat &frame);
 	double anglePoint( cv::Point pt1, cv::Point pt2, cv::Point pt0 );
 };
 

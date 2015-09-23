@@ -15,7 +15,7 @@ public:
 	HoughCircleDetection(cv::VideoCapture &capture);
 	virtual ~HoughCircleDetection();
 
-	void processFrame(cv::Mat &frame, std::vector<Region *> &regionList);
+	std::vector<Region *>*  processFrame(cv::Mat &frame);
 };
 
 #endif /* VISION_HOUGHCIRCLEDETECTION_H_ */
