@@ -12,7 +12,7 @@
 #include <iostream>
 #include <signal.h>
 
-static volatile int keepRunning = 1;
+static volatile int keepRunning = 1; //note for JS, prevents compiler access errors
 
 void intHandler(int dummy) {
     keepRunning = 0;
@@ -50,6 +50,7 @@ int main(int argc, char **argv)
 void search(cv::VideoCapture *capture, BotController *bt) {
 	cv::Mat frame;
 	std::vector<Region *> *regionList;
+	//Designed to be modifiable between algs, could nest if statements in case of detection failure of a certain object? -JS
 	ImageProcessor *ip = new HoughCircleDetection(*capture);
 	while (keepRunning) {
 		(*capture) >> frame;
