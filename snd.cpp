@@ -78,9 +78,9 @@ void destroy(cv::VideoCapture *capture, BotController *bt) {
 
 		Region *largest = regionList->at(0);
 
-		if ((largest->getX-frame.cols)/frame.cols > 0.05) {
+		if ((largest->getX()-frame.cols)/frame.cols > 0.05) {
 			bt->spin(-10);
-		} else if ((largest->getX-frame.cols)/frame.cols < -0.05) {
+		} else if ((largest->getX()-frame.cols)/frame.cols < -0.05) {
 			bt->spin(10);
 		} else {
 			bt->move(0, 1);
