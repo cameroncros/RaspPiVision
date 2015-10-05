@@ -246,6 +246,7 @@ void ImageProcessor::printReport()
 {
 	std::cout << methodType << std::endl;
 	std::cout << "Total time taken (ms):\t" << totalTime/(CLOCKS_PER_SEC/1000) << std::endl;
+	std::cout << "Total number of frames processed:\t" <<totalFrames << std::endl;
 	std::cout << "Average Frame Time (ms):\t" << (totalTime/(CLOCKS_PER_SEC/1000))/numFrames << std::endl;
 	std::cout << "Minimum Frame Time (ms):\t" << minTime/(CLOCKS_PER_SEC/1000) << std::endl;
 	std::cout << "Maximum Frame Time (ms):\t" << maxTime/(CLOCKS_PER_SEC/1000) << std::endl;
