@@ -93,7 +93,7 @@ int main(int ac, char** av) {
 
 	proc->process(numFrames);
 	proc->loadBenchmark(av[4]);
-	proc->printReport(std::string(av[3]));
+	proc->printReport(std::string(av[1]));
 	delete(proc);
 	return 0;
 }
