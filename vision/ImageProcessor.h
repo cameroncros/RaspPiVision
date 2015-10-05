@@ -50,7 +50,7 @@ public:
 	void initialiseWindow();
 	void loadBenchmark(std::string benchfile);
 	int compareToBaseline();
-	void printReport();
+	void printReport(std::string filename);
 	void cleanRegionList();
 };
 
