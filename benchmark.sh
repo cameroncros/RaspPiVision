@@ -40,4 +40,9 @@
 ./test ./tests/redBoxT3.avi HoughCircleDetection 1000 ./tests/blueball.txt
 ./test ./tests/redBoxT3.avi BasicShapeDetection 1000 ./tests/blueball.txt
 
-
+./test ./tests/redBoxBlueFront.avi RGBBasic 1000 ./tests/blueball.txt
+./test ./tests/redBoxBlueFront.avi HSVBasic 1000 ./tests/blueball.txt
+./test ./tests/redBoxBlueFront.avi HSVRegion 1000 ./tests/blueball.txt
+./test ./tests/redBoxBlueFront.avi HSVRegionMinAlloc 1000 ./tests/blueball.txt
+./test ./tests/redBoxBlueFront.avi HoughCircleDetection 1000 ./tests/blueball.txt
+./test ./tests/redBoxBlueFront.avi BasicShapeDetection 1000 ./tests/blueball.txt
