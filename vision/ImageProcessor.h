@@ -31,6 +31,7 @@ protected:
 	std::string methodType;
 	cv::Vec3b black;
 	long totalTime, minTime, maxTime;
+	long foundObject, totalObjects, totalFrames;
 	int numFrames;
 	std::vector<Region*> *regionList;
 

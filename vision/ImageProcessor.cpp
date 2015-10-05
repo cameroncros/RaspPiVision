@@ -21,6 +21,9 @@ ImageProcessor::ImageProcessor(cv::VideoCapture &capture) {
 	maxTime = INT32_MIN;
 	totalTime = 0;
 	numFrames = 0;
+	foundObject = 0;
+	totalObjects = 0;
+	totalFrames = 0;
 	regionList = new std::vector<Region *>();
 }
 
@@ -53,10 +56,17 @@ void ImageProcessor::process(int maxFrames) {
 		if (frame.empty()) {
 			break;
 		}
+		totalFrames++;
 		clock_t t = clock();
 
 		cleanRegionList();
 		processFrame(frame);
+		if (regionList->size() != 0) {
+			foundObject++;
+			totalObjects += regionList->size();
+		} else {
+			return;
+		}
 		std::sort(regionList->begin(), regionList->end(), compareBySize);
 		calc[z] = (*regionList)[0];
 		//printCentre(z, calc[z]);
@@ -123,6 +133,7 @@ void ImageProcessor::drawFrame(cv::Mat &frame)
 {
 #ifdef GUI
 	cv::imshow(window_name, frame);
+	cv::waitKey(5);
 #endif
 }
 
@@ -138,7 +149,6 @@ void ImageProcessor::processKeys(cv::Mat &frame)
 	char key = 0;
 	while (key != ' ') {
 		key= (char)cv::waitKey(5); //delay N millis, usually long enough to display and capture input
-
 		switch (key) {
 		case 'q':
 		case 'Q':
@@ -235,10 +245,12 @@ int ImageProcessor::compareToBaseline()
 void ImageProcessor::printReport()
 {
 	std::cout << methodType << std::endl;
-	std::cout << "Total time taken (ms): " << totalTime/(CLOCKS_PER_SEC/1000) << std::endl;
-	std::cout << "Average Frame Time (ms): " << (totalTime/(CLOCKS_PER_SEC/1000))/numFrames << std::endl;
-	std::cout << "Minimum Frame Time (ms): " << minTime/(CLOCKS_PER_SEC/1000) << std::endl;
-	std::cout << "Maximum Frame Time (ms): " << maxTime/(CLOCKS_PER_SEC/1000) << std::endl;
+	std::cout << "Total time taken (ms):\t" << totalTime/(CLOCKS_PER_SEC/1000) << std::endl;
+	std::cout << "Average Frame Time (ms):\t" << (totalTime/(CLOCKS_PER_SEC/1000))/numFrames << std::endl;
+	std::cout << "Minimum Frame Time (ms):\t" << minTime/(CLOCKS_PER_SEC/1000) << std::endl;
+	std::cout << "Maximum Frame Time (ms):\t" << maxTime/(CLOCKS_PER_SEC/1000) << std::endl;
+	std::cout << "Average number of objects found:\t" << totalObjects/foundObject << std::endl;
+	std::cout << "Percentage of frames with objects:\t" << (double)foundObject/totalFrames << std::endl;
 //	compareToBaseline();
 	std::cout << std::endl;
 }
