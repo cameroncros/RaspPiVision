@@ -65,7 +65,7 @@ void ImageProcessor::process(int maxFrames) {
 			foundObject++;
 			totalObjects += regionList->size();
 		} else {
-			return;
+			continue;
 		}
 		std::sort(regionList->begin(), regionList->end(), compareBySize);
 		calc[z] = (*regionList)[0];
