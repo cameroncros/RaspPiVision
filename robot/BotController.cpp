@@ -70,10 +70,9 @@ double BotController::motorPower(int motorNum, double direction) {
 	}
 }
 
-void BotController::spin(double angle) {
-	double time = abs(angle);
+void BotController::spin(bool clockwise) {
 	int direction;
-	if (angle > 0) {
+	if (clockwise) {
 		direction = GB_MOVE_A;
 	} else {
 		direction = GB_MOVE_B;
@@ -81,11 +80,10 @@ void BotController::spin(double angle) {
 	for (int i = 0; i < 3; i++) {
 		move_brushed(0, i, direction);
 	}
-	usleep(time);
-	for (int i = 0; i < 3; i++) {
-		move_brushed(0, i, GB_MOVE_STOP);
-	}
+}
 
+void BotController::sleep(int ms) {
+	usleep((time_t)time);
 }
 
 void BotController::stop() {

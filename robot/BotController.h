@@ -15,7 +15,8 @@ public:
 
 	void move(double direction, double speed);
 	double motorPower(int motorId, double direction);
-	void spin(double angle);
+	void spin(bool clockwise);
+	void sleep(int ms);
 	void stop();
 };
 

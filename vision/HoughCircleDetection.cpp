@@ -22,7 +22,7 @@ std::vector<Region *>*  HoughCircleDetection::processFrame(cv::Mat& frame) {
 	cvtColor(frame, frame, CV_BGR2GRAY);
 	GaussianBlur(frame, frame, cv::Size(9, 9), 2, 2);
 	cv::vector<cv::Vec3f> circles;
-	HoughCircles(frame, circles, CV_HOUGH_GRADIENT, 1, frame.rows/8, 200, 100, 0, 0 );
+	HoughCircles(frame, circles, CV_HOUGH_GRADIENT, 1, frame.rows/8, 40, 40, 0, 0 );
 
 	for (unsigned int i = 0; i < circles.size(); i++) {
 		regionList->push_back(new Region(circles[i][0], circles[i][1], circles[i][2]));

@@ -52,15 +52,19 @@ void search(cv::VideoCapture *capture, BotController *bt) {
 	std::vector<Region *> *regionList;
 	//Designed to be modifiable between algs, could nest if statements in case of detection failure of a certain object? -JS
 	ImageProcessor *ip = new HoughCircleDetection(*capture);
+
+	bt->spin(1);
 	while (keepRunning) {
 		(*capture) >> frame;
+		ip->saveFrame(frame);
 		ip->cleanRegionList();
 		regionList = ip->processFrame(frame);
 		if (regionList->size() > 1) {
 			break;
 		}
-		bt->spin(10);
+		bt->sleep(1);
 	}
+	bt->stop();
 }
 
 void destroy(cv::VideoCapture *capture, BotController *bt) {
@@ -80,9 +84,13 @@ void destroy(cv::VideoCapture *capture, BotController *bt) {
 		Region *largest = regionList->at(0);
 
 		if ((largest->getX()-frame.cols)/frame.cols > 0.05) {
-			bt->spin(-10);
+			bt->spin(1);
+			bt->sleep(10);
+			bt->stop();
 		} else if ((largest->getX()-frame.cols)/frame.cols < -0.05) {
-			bt->spin(10);
+			bt->spin(0);
+			bt->sleep(10);
+			bt->stop();
 		} else {
 			bt->move(0, 1);
 		}
