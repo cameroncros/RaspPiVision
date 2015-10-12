@@ -7,7 +7,7 @@
 
 #include "robot/BotController.h"
 #include "vision/ImageProcessor.h"
-#include "vision/HoughCircleDetection.h"
+#include "vision/BasicShapeDetection.h"
 #include <unistd.h>
 #include <iostream>
 #include <signal.h>
@@ -51,16 +51,24 @@ void search(cv::VideoCapture *capture, BotController *bt) {
 	cv::Mat frame;
 	std::vector<Region *> *regionList;
 	//Designed to be modifiable between algs, could nest if statements in case of detection failure of a certain object? -JS
-	ImageProcessor *ip = new HoughCircleDetection(*capture);
+	ImageProcessor *ip = new BasicShapeDetection(*capture);
 
-	bt->spin(1);
+	(*capture) >> frame;
 	while (keepRunning) {
+		bt->spin(1);
+		bt->sleep(20);
+		bt->stop();
+		bt->sleep(500);
 		(*capture) >> frame;
-		ip->saveFrame(frame);
 		ip->cleanRegionList();
 		regionList = ip->processFrame(frame);
 		if (regionList->size() > 1) {
-			break;
+			for (Region *reg : *regionList) {
+				double angle = ip->angle(frame, *reg);
+				double dist = ip->distance(frame, *reg);
+				ip->drawArrow(frame, angle, dist);
+			}
+			ip->saveFrame(frame);
 		}
 		bt->sleep(1);
 	}
@@ -70,7 +78,7 @@ void search(cv::VideoCapture *capture, BotController *bt) {
 void destroy(cv::VideoCapture *capture, BotController *bt) {
 	cv::Mat frame;
 	std::vector<Region *> *regionList = new std::vector<Region *>();
-	ImageProcessor *ip = new HoughCircleDetection(*capture);
+	ImageProcessor *ip = new BasicShapeDetection(*capture);
 	while (keepRunning) {
 		bt->move(0, 1);
 		(*capture) >> frame;
