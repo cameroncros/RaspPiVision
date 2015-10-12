@@ -67,6 +67,9 @@ void search(cv::VideoCapture *capture, BotController *bt) {
 				double angle = ip->angle(frame, *reg);
 				double dist = ip->distance(frame, *reg);
 				ip->drawArrow(frame, angle, dist);
+				if (reg->getColor() == BLACK) {
+					break;
+				}
 			}
 			ip->saveFrame(frame);
 		}
@@ -88,14 +91,19 @@ void destroy(cv::VideoCapture *capture, BotController *bt) {
 			break;
 		}
 		std::sort(regionList->begin(), regionList->end(), compareBySize);
+		Region *largestColor;
+		for (int i = 0; i < regionList->size(); i++) {
+			largestColor = regionList->at(i);
+			if (largestColor->getColor() == BLACK) {
+				break;
+			}
+		}
 
-		Region *largest = regionList->at(0);
-
-		if ((largest->getX()-frame.cols)/frame.cols > 0.05) {
+		if ((largestColor->getX()-frame.cols)/frame.cols > 0.05) {
 			bt->spin(1);
 			bt->sleep(10);
 			bt->stop();
-		} else if ((largest->getX()-frame.cols)/frame.cols < -0.05) {
+		} else if ((largestColor->getX()-frame.cols)/frame.cols < -0.05) {
 			bt->spin(0);
 			bt->sleep(10);
 			bt->stop();

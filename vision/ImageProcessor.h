@@ -14,11 +14,9 @@
 #include <vector>
 #include "Region.h"
 
-#define BLUE 0
-#define GREEN 1
-#define RED 2
-
 void onMouse(int event, int x, int y, int, void*);
+
+class Region;
 
 class ImageProcessor {
 protected:

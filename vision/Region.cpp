@@ -17,10 +17,11 @@ Region::Region() {
 	this->size = -1;
 }
 
-Region::Region(double x, double y, double size) {
+Region::Region(double x, double y, double size, Color color) {
 	this->x = x;
 	this->y = y;
 	this->size = size;
+	this->color = color;
 }
 
 Region::~Region() {
@@ -61,4 +62,14 @@ double Region::getSize() const {
 
 void Region::setSize(double size) {
 	this->size = size;
+}
+
+void Region::setColor(Color color) {
+	this->color = color;
+}
+
+
+
+Color Region::getColor() const {
+	return color;
 }

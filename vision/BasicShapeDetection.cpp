@@ -105,7 +105,9 @@ std::vector<Region *>* BasicShapeDetection::processFrame(cv::Mat& frame) {
 					}
 					x /= count;
 					y /= count;
-					regionList->push_back(new Region(x, y, fabs(cv::contourArea(cv::Mat(approx)))));
+					double size = sqrt(fabs(cv::contourArea(cv::Mat(approx))));
+					Color col = getColor(frame, x, y, size);
+					regionList->push_back(new Region(x, y, size, col));
 				}
 			}
 		}
@@ -123,4 +125,40 @@ double BasicShapeDetection::anglePoint( cv::Point pt1, cv::Point pt2, cv::Point 
 	double dx2 = pt2.x - pt0.x;
 	double dy2 = pt2.y - pt0.y;
 	return (dx1*dx2 + dy1*dy2)/sqrt((dx1*dx1 + dy1*dy1)*(dx2*dx2 + dy2*dy2) + 1e-10);
+}
+
+Color BasicShapeDetection::getColor(cv::Mat frame, int x, int y, int size) {
+	long r = 0, b = 0, g = 0, total=0;
+	int squareWidth = size/2;
+	for (int i = x-(squareWidth/2); i < x+(squareWidth/2); i++) {
+		for (int j = y-(squareWidth/2); j < y+(squareWidth/2); j++) {
+			total++;
+			cv::Vec3b val = frame.at<cv::Vec3b>(i, j);
+			r += val[RED];
+			b += val[BLUE];
+			g += val[GREEN];
+		}
+	}
+	r /= total;
+	b /= total;
+	g /= total;
+
+	cv::Vec3b averageVal;
+	averageVal[RED]=r;
+	averageVal[BLUE]=b;
+	averageVal[GREEN]=g;
+
+	cvtColor(averageVal, averageVal, CV_BGR2HSV);
+	if (averageVal[1] < 70) {
+		return WHITE;
+	}
+	if (averageVal[2] < 70) {
+		return BLACK;
+	}
+
+	if (averageVal[0] < 140 && averageVal[0] > 100) {
+		return BLUE;
+	}
+
+	return UNKNOWN;
 }

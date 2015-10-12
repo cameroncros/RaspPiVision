@@ -16,6 +16,7 @@ public:
 	virtual ~HoughCircleDetection();
 
 	std::vector<Region *>*  processFrame(cv::Mat &frame);
+	Color getColor(cv::Mat frame, int x, int y, int size);
 };
 
 #endif /* VISION_HOUGHCIRCLEDETECTION_H_ */

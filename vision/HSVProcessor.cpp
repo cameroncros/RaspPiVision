@@ -37,7 +37,7 @@ std::vector<Region *>*  HSVProcessor::processFrame(cv::Mat &frame)
 		}
 	}
 	if (totalBlue != 0) {
-		regionList->push_back(new Region(sumX/totalBlue, sumY/totalBlue, totalBlue));
+		regionList->push_back(new Region(sumX/totalBlue, sumY/totalBlue, totalBlue, BLUE));
 	}
 	return regionList;
 }
