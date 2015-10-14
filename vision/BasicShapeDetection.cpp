@@ -7,6 +7,44 @@
 
 #include "BasicShapeDetection.h"
 
+int BasicShapeDetection::maximum( int a, int b, int c )
+{
+   int max = ( a < b ) ? b : a;
+   return ( ( max < c ) ? c : max );
+}
+
+int BasicShapeDetection::minimum( int a, int b, int c )
+{
+   int max = ( a > b ) ? b : a;
+   return ( ( max > c ) ? c : max );
+}
+
+void BasicShapeDetection::RGBtoHSV( float r, float g, float b, float *h, float *s, float *v )
+{
+	float min, max, delta;
+	min = minimum( r, g, b );
+	max = maximum( r, g, b );
+	*v = max;				// v
+	delta = max - min;
+	if( max != 0 )
+		*s = delta / max;		// s
+	else {
+		// r = g = b = 0		// s = 0, v is undefined
+		*s = 0;
+		*h = -1;
+		return;
+	}
+	if( r == max )
+		*h = ( g - b ) / delta;		// between yellow & magenta
+	else if( g == max )
+		*h = 2 + ( b - r ) / delta;	// between cyan & yellow
+	else
+		*h = 4 + ( r - g ) / delta;	// between magenta & cyan
+	*h *= 60;				// degrees
+	if( *h < 0 )
+		*h += 360;
+}
+
 BasicShapeDetection::BasicShapeDetection(cv::VideoCapture &capture) : ImageProcessor::ImageProcessor(capture) {
 	// TODO Auto-generated constructor stub
 	methodType = "BasicShapeDetection";
@@ -131,7 +169,17 @@ Color BasicShapeDetection::getColor(cv::Mat frame, int x, int y, int size) {
 	long r = 0, b = 0, g = 0, total=0;
 	int squareWidth = size/2;
 	for (int i = x-(squareWidth/2); i < x+(squareWidth/2); i++) {
+		if (i < 0) {
+			continue;
+		} else if (i > frame.cols) {
+			break;
+		}
 		for (int j = y-(squareWidth/2); j < y+(squareWidth/2); j++) {
+			if (j < 0) {
+				continue;
+			} else if (j > frame.rows) {
+				break;
+			}
 			total++;
 			cv::Vec3b val = frame.at<cv::Vec3b>(i, j);
 			r += val[RED];
@@ -143,22 +191,27 @@ Color BasicShapeDetection::getColor(cv::Mat frame, int x, int y, int size) {
 	b /= total;
 	g /= total;
 
-	cv::Vec3b averageVal;
-	averageVal[RED]=r;
-	averageVal[BLUE]=b;
-	averageVal[GREEN]=g;
+	float h, s, v;
 
-	cvtColor(averageVal, averageVal, CV_BGR2HSV);
-	if (averageVal[1] < 70) {
+	RGBtoHSV(((float)r)/255, ((float)g)/255, ((float)b)/255, &h, &s, &v);
+
+	h *= 255;
+	s *= 255;
+	v *= 255;
+
+
+	if (s < 70) {
 		return WHITE;
 	}
-	if (averageVal[2] < 70) {
+	if (v < 70) {
 		return BLACK;
 	}
 
-	if (averageVal[0] < 140 && averageVal[0] > 100) {
+	if (h < 280 && h > 200) {
 		return BLUE;
 	}
 
 	return UNKNOWN;
 }
+
+

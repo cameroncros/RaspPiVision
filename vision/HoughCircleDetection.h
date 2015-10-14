@@ -17,6 +17,10 @@ public:
 
 	std::vector<Region *>*  processFrame(cv::Mat &frame);
 	Color getColor(cv::Mat frame, int x, int y, int size);
+
+	int maximum( int a, int b, int c );
+	int minimum( int a, int b, int c );
+	void RGBtoHSV( float r, float g, float b, float *h, float *s, float *v );
 };
 
 #endif /* VISION_HOUGHCIRCLEDETECTION_H_ */
