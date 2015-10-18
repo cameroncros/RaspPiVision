@@ -21,8 +21,8 @@ public:
 	double anglePoint( cv::Point pt1, cv::Point pt2, cv::Point pt0 );
 	Color getColor(cv::Mat frame, int x, int y, int size);
 
-	int maximum( int a, int b, int c );
-	int minimum( int a, int b, int c );
+	float maximum( float a, float b, float c );
+	float minimum( float a, float b, float c );
 	void RGBtoHSV( float r, float g, float b, float *h, float *s, float *v );
 };
 

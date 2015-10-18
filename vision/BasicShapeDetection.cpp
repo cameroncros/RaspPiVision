@@ -7,15 +7,15 @@
 
 #include "BasicShapeDetection.h"
 
-int BasicShapeDetection::maximum( int a, int b, int c )
+float BasicShapeDetection::maximum( float a, float b, float c )
 {
-   int max = ( a < b ) ? b : a;
+   float max = ( a < b ) ? b : a;
    return ( ( max < c ) ? c : max );
 }
 
-int BasicShapeDetection::minimum( int a, int b, int c )
+float BasicShapeDetection::minimum( float a, float b, float c )
 {
-   int max = ( a > b ) ? b : a;
+   float max = ( a > b ) ? b : a;
    return ( ( max > c ) ? c : max );
 }
 
@@ -195,10 +195,11 @@ Color BasicShapeDetection::getColor(cv::Mat frame, int x, int y, int size) {
 
 	RGBtoHSV(((float)r)/255, ((float)g)/255, ((float)b)/255, &h, &s, &v);
 
-	h *= 255;
+	//h *= 255;
 	s *= 255;
 	v *= 255;
 
+	std::cout << h << ":" << s << ":" << v << std::endl;
 
 	if (s < 70) {
 		return WHITE;

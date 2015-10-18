@@ -62,13 +62,14 @@ void search(cv::VideoCapture *capture, BotController *bt) {
 		(*capture) >> frame;
 		ip->cleanRegionList();
 		regionList = ip->processFrame(frame);
-		if (regionList->size() > 1) {
+		if (regionList->size() > 0) {
 			for (Region *reg : *regionList) {
 				double angle = ip->angle(frame, *reg);
 				double dist = ip->distance(frame, *reg);
 				ip->drawArrow(frame, angle, dist);
 				if (reg->getColor() == BLACK) {
-					break;
+					std::cout << "Found the black square" << std::endl;
+					return;
 				}
 			}
 			ip->saveFrame(frame);
