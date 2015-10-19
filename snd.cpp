@@ -86,6 +86,7 @@ void destroy(cv::VideoCapture *capture, BotController *bt) {
 	while (keepRunning) {
 		bt->move(0, 1);
 		(*capture) >> frame;
+		ip->cleanRegionList();
 		regionList = ip->processFrame(frame);
 		if (regionList->size() == 0) {
 			bt->stop();
@@ -93,7 +94,7 @@ void destroy(cv::VideoCapture *capture, BotController *bt) {
 		}
 		std::sort(regionList->begin(), regionList->end(), compareBySize);
 		Region *largestColor;
-		for (int i = 0; i < regionList->size(); i++) {
+		for (unsigned int i = 0; i < regionList->size(); i++) {
 			largestColor = regionList->at(i);
 			if (largestColor->getColor() == BLACK) {
 				break;

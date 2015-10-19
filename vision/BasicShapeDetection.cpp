@@ -57,7 +57,6 @@ BasicShapeDetection::~BasicShapeDetection() {
 
 std::vector<Region *>* BasicShapeDetection::processFrame(cv::Mat& frame) {
 	//code taken from squares.cpp in opencv docs. Modified to suit.
-	double thresh = 1;
 	double N = 3;
 	squares.clear();
 
@@ -165,16 +164,16 @@ double BasicShapeDetection::anglePoint( cv::Point pt1, cv::Point pt2, cv::Point 
 	return (dx1*dx2 + dy1*dy2)/sqrt((dx1*dx1 + dy1*dy1)*(dx2*dx2 + dy2*dy2) + 1e-10);
 }
 
-Color BasicShapeDetection::getColor(cv::Mat frame, int x, int y, int size) {
+Color BasicShapeDetection::getColor(cv::Mat &frame, int x, int y, int size) {
 	long r = 0, b = 0, g = 0, total=0;
 	int squareWidth = size/2;
-	for (int i = x-(squareWidth/2); i < x+(squareWidth/2); i++) {
+	for (int i = y-(squareWidth/2); i < y+(squareWidth/2); i++) {
 		if (i < 0) {
 			continue;
 		} else if (i > frame.cols) {
 			break;
 		}
-		for (int j = y-(squareWidth/2); j < y+(squareWidth/2); j++) {
+		for (int j = x-(squareWidth/2); j < x+(squareWidth/2); j++) {
 			if (j < 0) {
 				continue;
 			} else if (j > frame.rows) {
@@ -185,6 +184,7 @@ Color BasicShapeDetection::getColor(cv::Mat frame, int x, int y, int size) {
 			r += val[RED];
 			b += val[BLUE];
 			g += val[GREEN];
+			frame.at<cv::Vec3b>(i, j)=BLACK;
 		}
 	}
 	r /= total;

@@ -19,7 +19,7 @@ public:
 
 	std::vector<Region *>* processFrame(cv::Mat &frame);
 	double anglePoint( cv::Point pt1, cv::Point pt2, cv::Point pt0 );
-	Color getColor(cv::Mat frame, int x, int y, int size);
+	Color getColor(cv::Mat &frame, int x, int y, int size);
 
 	float maximum( float a, float b, float c );
 	float minimum( float a, float b, float c );
