@@ -28,9 +28,9 @@ BotController::~BotController() {
 //need some complex math to make the bot move correctly
 void BotController::move(double direction, double speed) {
 	for (int i = 0; i < 3; i++) {
+		if (i == 2) i = 3;
 		double power = motorPower(i, direction);
 		pwm_brushed(0, i, 1000, abs(power));
-		if (i == 2) i = 3;
 		if (power > 0) {
 			move_brushed(0, i, GB_MOVE_A);
 		} else if (power < 0) {
