@@ -203,7 +203,7 @@ void ImageProcessor::loadBenchmark(std::string benchfile)
 				double x = std::stod(line);
 				std::getline (*myfile,line);
 				double y = std::stod(line);
-				baseline[lineNo] = new Region(x,y,0, UNKNOWN);
+				baseline[lineNo] = new Region(x,y,0, UNKNOWN, BLOB);
 			}
 			catch (std::exception &e) {
 				std::cout << "Invalid Argument: " << line << std::endl;

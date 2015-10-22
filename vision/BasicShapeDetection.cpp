@@ -9,14 +9,14 @@
 
 float BasicShapeDetection::maximum( float a, float b, float c )
 {
-   float max = ( a < b ) ? b : a;
-   return ( ( max < c ) ? c : max );
+	float max = ( a < b ) ? b : a;
+	return ( ( max < c ) ? c : max );
 }
 
 float BasicShapeDetection::minimum( float a, float b, float c )
 {
-   float max = ( a > b ) ? b : a;
-   return ( ( max > c ) ? c : max );
+	float max = ( a > b ) ? b : a;
+	return ( ( max > c ) ? c : max );
 }
 
 void BasicShapeDetection::RGBtoHSV( float r, float g, float b, float *h, float *s, float *v )
@@ -64,36 +64,36 @@ std::vector<Region *>* BasicShapeDetection::processFrame(cv::Mat& frame) {
 
 	cvtColor(frame, gray0, CV_BGR2GRAY);
 
-//	// down-scale and upscale the image to filter out the noise
-//	cv::pyrDown(frame, pyr, cv::Size(frame.cols/2, frame.rows/2));
-//	cv::pyrUp(pyr, timg, frame.size());
+	//	// down-scale and upscale the image to filter out the noise
+	//	cv::pyrDown(frame, pyr, cv::Size(frame.cols/2, frame.rows/2));
+	//	cv::pyrUp(pyr, timg, frame.size());
 	std::vector<std::vector<cv::Point> > contours;
 
 	// find squares in every color plane of the image
 
-//	int ch[] = {c, 0};
-//	mixChannels(&timg, 1, &gray0, 1, ch, 1);
+	//	int ch[] = {c, 0};
+	//	mixChannels(&timg, 1, &gray0, 1, ch, 1);
 
 	// try several threshold levels
 	for( int l = 0; l < N; l++ )
 	{
 		// hack: use Canny instead of zero threshold level.
 		// Canny helps to catch squares with gradient shading
-//		if( l == 0 )
-//		{
-//			// apply Canny. Take the upper threshold from slider
-//			// and set the lower to 0 (which forces edges merging)
-//			cv::Canny(gray0, gray, 0, thresh, 5);
-//			// dilate canny output to remove potential
-//			// holes between edge segments
-//			cv::dilate(gray, gray, cv::Mat(), cv::Point(-1,-1));
-//		}
-//		else
-//		{
-			// apply threshold if l!=0:
-			//     tgray(x,y) = gray(x,y) < (l+1)*255/N ? 255 : 0
-			gray = gray0 >= (l+1)*255/N;
-//		}
+		//		if( l == 0 )
+		//		{
+		//			// apply Canny. Take the upper threshold from slider
+		//			// and set the lower to 0 (which forces edges merging)
+		//			cv::Canny(gray0, gray, 0, thresh, 5);
+		//			// dilate canny output to remove potential
+		//			// holes between edge segments
+		//			cv::dilate(gray, gray, cv::Mat(), cv::Point(-1,-1));
+		//		}
+		//		else
+		//		{
+		// apply threshold if l!=0:
+		//     tgray(x,y) = gray(x,y) < (l+1)*255/N ? 255 : 0
+		gray = gray0 >= (l+1)*255/N;
+		//		}
 
 		// find contours and store them all as a list
 		cv::findContours(gray, contours, cv::RETR_LIST, cv::CHAIN_APPROX_SIMPLE);
@@ -113,39 +113,97 @@ std::vector<Region *>* BasicShapeDetection::processFrame(cv::Mat& frame) {
 			// Note: absolute value of an area is used because
 			// area may be positive or negative - in accordance with the
 			// contour orientation
-			if( approx.size() == 4 &&
-					fabs(cv::contourArea(cv::Mat(approx))) > 1000 &&
+
+			if(	fabs(cv::contourArea(cv::Mat(approx))) > 1000 &&
 					cv::isContourConvex(cv::Mat(approx)) )
 			{
-				double maxCosine = 0;
+				if (approx.size() == 4) {
+					double maxCosine = 0;
 
-				for( int j = 2; j < 5; j++ )
-				{
-					// find the maximum cosine of the angle between joint edges
-					double cosine = fabs(anglePoint(approx[j%4], approx[j-2], approx[j-1]));
-					if (maxCosine < cosine) {
-						maxCosine = cosine;
+					for( int j = 2; j < 5; j++ )
+					{
+						// find the maximum cosine of the angle between joint edges
+						double cosine = fabs(anglePoint(approx[j%4], approx[j-2], approx[j-1]));
+						if (maxCosine < cosine) {
+							maxCosine = cosine;
+						}
+					}
+
+					// if cosines of all angles are small
+					// (all angles are ~90 degree) then write quandrange
+					// vertices to resultant sequence
+					if( maxCosine < 0.3 ) {
+						double x=0;
+						double y=0;
+						int count = 0;
+						for (cv::Point pt : approx) {
+							x += pt.x;
+							y += pt.y;
+							count++;
+						}
+						x /= count;
+						y /= count;
+						double size = sqrt(fabs(cv::contourArea(cv::Mat(approx))));
+						Color col = getColor(frame, x, y, size);
+						regionList->push_back(new Region(x, y, size, col, SQUARE));
 					}
 				}
+				else if (approx.size() == 3) {
+					bool isTri = true;
 
-				// if cosines of all angles are small
-				// (all angles are ~90 degree) then write quandrange
-				// vertices to resultant sequence
-				if( maxCosine < 0.3 ) {
-					double x=0;
-					double y=0;
-					int count = 0;
-					for (cv::Point pt : approx) {
-						x += pt.x;
-						y += pt.y;
-						count++;
+					for( int j = 2; j < 3; j++ )
+					{
+						// find the maximum cosine of the angle between joint edges
+						double cosine = fabs(anglePoint(approx[j%3], approx[j-2], approx[j-1]));
+						if (cosine > 0.6 || cosine < 0.4) {
+							isTri = false;
+							break;
+						}
 					}
-					x /= count;
-					y /= count;
-					double size = sqrt(fabs(cv::contourArea(cv::Mat(approx))));
-					Color col = getColor(frame, x, y, size);
-					regionList->push_back(new Region(x, y, size, col));
+
+					// if cosines of all angles are small
+					// (all angles are ~90 degree) then write quandrange
+					// vertices to resultant sequence
+					if( isTri ) {
+						double x=0;
+						double y=0;
+						int count = 0;
+						for (cv::Point pt : approx) {
+							x += pt.x;
+							y += pt.y;
+							count++;
+						}
+						x /= count;
+						y /= count;
+						double size = sqrt(fabs(cv::contourArea(cv::Mat(approx))));
+						Color col = getColor(frame, x, y, size);
+						regionList->push_back(new Region(x, y, size, col, TRIANGLE));
+						std::cout << "Found a triangle" << std::endl;
+					}
 				}
+				else {
+					double C = cv::arcLength(approx, true);
+					double A = cv::contourArea(approx);
+					double ratio = C*C/(4*M_PI*A);
+					if (ratio < 1.1 && ratio > 0.9) {
+						double x=0;
+						double y=0;
+						int count = 0;
+						for (cv::Point pt : approx) {
+							x += pt.x;
+							y += pt.y;
+							count++;
+						}
+						x /= count;
+						y /= count;
+						double size = sqrt(fabs(cv::contourArea(cv::Mat(approx))));
+						Color col = getColor(frame, x, y, size);
+						regionList->push_back(new Region(x, y, size, col, CIRCLE));
+						std::cout << "Found a circle" << std::endl;
+					}
+
+				}
+
 			}
 		}
 	}
@@ -187,6 +245,9 @@ Color BasicShapeDetection::getColor(cv::Mat &frame, int x, int y, int size) {
 			frame.at<cv::Vec3b>(i, j)=BLACK;
 		}
 	}
+	if (total == 0) {
+		return UNKNOWN;
+	}
 	r /= total;
 	b /= total;
 	g /= total;
@@ -210,6 +271,14 @@ Color BasicShapeDetection::getColor(cv::Mat &frame, int x, int y, int size) {
 
 	if (h < 280 && h > 200) {
 		return BLUE;
+	}
+
+	if (h < 360 && h > 320) {
+		return RED;
+	}
+
+	if (h < 150 && h > 90) {
+		return GREEN;
 	}
 
 	return UNKNOWN;

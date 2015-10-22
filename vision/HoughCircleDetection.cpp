@@ -65,7 +65,7 @@ std::vector<Region *>*  HoughCircleDetection::processFrame(cv::Mat& frame) {
 
 	for (unsigned int i = 0; i < circles.size(); i++) {
 		Color col = getColor(frame, circles[i][0], circles[i][1], circles[i][2]);
-		regionList->push_back(new Region(circles[i][0], circles[i][1], circles[i][2], col));
+		regionList->push_back(new Region(circles[i][0], circles[i][1], circles[i][2], col, CIRCLE));
 	}
 	return regionList;
 }

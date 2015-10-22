@@ -62,7 +62,7 @@ Region *HSV_Region_Processor::findRegion(cv::Mat &frame, int i, int j) {
 	}
 	delete(pointList);
 	if (totalBlue > 1) {
-		return new Region(sumX/totalBlue, sumY/totalBlue, totalBlue, BLUE);
+		return new Region(sumX/totalBlue, sumY/totalBlue, totalBlue, BLUE, BLOB);
 	} else {
 		return NULL;
 	}

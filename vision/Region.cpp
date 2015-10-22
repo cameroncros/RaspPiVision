@@ -16,13 +16,15 @@ Region::Region() {
 	this->y = -1;
 	this->size = -1;
 	this->color = UNKNOWN;
+	this->shape = BLOB;
 }
 
-Region::Region(double x, double y, double size, Color color) {
+Region::Region(double x, double y, double size, Color color, Shape shape) {
 	this->x = x;
 	this->y = y;
 	this->size = size;
 	this->color = color;
+	this->shape = shape;
 }
 
 Region::~Region() {
@@ -45,6 +47,14 @@ void Region::setX(double x)
 void Region::setY(double y)
 {
 	this->y=y;
+}
+
+Shape Region::getShape() const {
+	return shape;
+}
+
+void Region::setShape(Shape shape) {
+	this->shape = shape;
 }
 
 double Region::compare(const Region &val) const

@@ -34,7 +34,7 @@ std::vector<Region *>*  RGBProcessor::processFrame(cv::Mat &frame) {
 		}
 	}
 	if (totalBlue != 0) {
-		regionList->push_back(new Region(sumX/totalBlue, sumY/totalBlue, totalBlue, BLUE));
+		regionList->push_back(new Region(sumX/totalBlue, sumY/totalBlue, totalBlue, BLUE, BLOB));
 	}
 	return regionList;
 }

@@ -29,7 +29,7 @@ std::vector<Region *>*  HSV_Region_Processor_Min_Alloc::processFrame(cv::Mat &fr
 			if (isBlue(row[j])) {
 				findRegion(hsvFrame, i, j, regX, regY, regSize);
 				if (regSize != -1) {
-					regionList->push_back(new Region(regX, regY, regSize, BLUE));
+					regionList->push_back(new Region(regX, regY, regSize, BLUE, BLOB));
 				}
 			}
 

@@ -19,20 +19,29 @@ typedef enum {
 	UNKNOWN
 } Color;
 
+typedef enum {
+	SQUARE,
+	CIRCLE,
+	TRIANGLE,
+	BLOB
+} Shape;
+
 class Region {
 
 public:
 	Region();
-	Region(double x, double y, double size, Color color);
+	Region(double x, double y, double size, Color color, Shape shape);
 	virtual ~Region();
 	double getX() const;
 	double getY() const;
 	double getSize() const;
 	Color getColor() const;
+	Shape getShape() const;
 	void setX(double x);
 	void setY(double y);
 	void setSize(double size);
 	void setColor(Color color);
+	void setShape(Shape shape);
 	double compare(const Region &val) const;
 
 
@@ -40,6 +49,7 @@ private:
 	double x, y;
 	double size;
 	Color color;
+	Shape shape;
 };
 
 #endif /* REGION_H_ */
