@@ -16,8 +16,8 @@ BotController::BotController() {
 	stop_all();
 	set_mode(0, 0, GB_MODE_BRUSH);
 	set_mode(0, 1, GB_MODE_BRUSH);
-	set_mode(0, 2, GB_MODE_BRUSH);
-	set_mode(0, 3, GB_MODE_OFF);
+	set_mode(0, 2, GB_MODE_OFF);
+	set_mode(0, 3, GB_MODE_BRUSH);
 
 }
 
@@ -30,6 +30,7 @@ void BotController::move(double direction, double speed) {
 	for (int i = 0; i < 3; i++) {
 		double power = motorPower(i, direction);
 		pwm_brushed(0, i, 1000, abs(power));
+		if (i == 2) i = 3;
 		if (power > 0) {
 			move_brushed(0, i, GB_MOVE_A);
 		} else if (power < 0) {
@@ -41,6 +42,8 @@ void BotController::move(double direction, double speed) {
 }
 
 double BotController::motorPower(int motorNum, double direction) {
+	//global offset
+	direction-=120;
 	//different motor offsets
 	if (motorNum == 1) {
 		direction-=120;
@@ -78,6 +81,7 @@ void BotController::spin(bool clockwise) {
 		direction = GB_MOVE_B;
 	}
 	for (int i = 0; i < 3; i++) {
+		if (i == 2) i = 3;
 		move_brushed(0, i, direction);
 	}
 }
