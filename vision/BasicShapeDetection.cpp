@@ -178,7 +178,6 @@ std::vector<Region *>* BasicShapeDetection::processFrame(cv::Mat& frame) {
 						double size = sqrt(fabs(cv::contourArea(cv::Mat(approx))));
 						Color col = getColor(frame, x, y, size);
 						regionList->push_back(new Region(x, y, size, col, TRIANGLE));
-						std::cout << "Found a triangle" << std::endl;
 					}
 				}
 				else {
@@ -199,7 +198,6 @@ std::vector<Region *>* BasicShapeDetection::processFrame(cv::Mat& frame) {
 						double size = sqrt(fabs(cv::contourArea(cv::Mat(approx))));
 						Color col = getColor(frame, x, y, size);
 						regionList->push_back(new Region(x, y, size, col, CIRCLE));
-						std::cout << "Found a circle" << std::endl;
 					}
 
 				}
@@ -259,8 +257,6 @@ Color BasicShapeDetection::getColor(cv::Mat &frame, int x, int y, int size) {
 	//h *= 255;
 	s *= 255;
 	v *= 255;
-
-	std::cout << h << ":" << s << ":" << v << std::endl;
 
 	if (s < 70) {
 		return WHITE;

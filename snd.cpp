@@ -44,7 +44,7 @@ int main(int argc, char **argv)
 	}
 
 	std::cout << "Shutting down" << std::endl;
-	bt->stop();
+//	bt->stop();
 }
 
 void search(cv::VideoCapture *capture, BotController *bt) {
@@ -67,12 +67,11 @@ void search(cv::VideoCapture *capture, BotController *bt) {
 				double angle = ip->angle(frame, *reg);
 				double dist = ip->distance(frame, *reg);
 				ip->drawArrow(frame, angle, dist);
-				if (reg->getColor() == BLACK) {
+				if (reg->getColor() == BLACK && reg->getShape() == SQUARE) {
 					std::cout << "Found the black square" << std::endl;
 					return;
 				}
 			}
-			ip->saveFrame(frame);
 		}
 		bt->sleep(1);
 	}
@@ -84,35 +83,41 @@ void destroy(cv::VideoCapture *capture, BotController *bt) {
 	std::vector<Region *> *regionList = new std::vector<Region *>();
 	ImageProcessor *ip = new BasicShapeDetection(*capture);
 	while (keepRunning) {
-		bt->move(0, 1);
 		(*capture) >> frame;
 		ip->cleanRegionList();
 		regionList = ip->processFrame(frame);
 		if (regionList->size() == 0) {
-			bt->stop();
 			break;
 		}
 		std::sort(regionList->begin(), regionList->end(), compareBySize);
-		Region *largestColor;
+		Region *largestColor, *foundRegion = NULL;
 		for (unsigned int i = 0; i < regionList->size(); i++) {
 			largestColor = regionList->at(i);
-			if (largestColor->getColor() == BLACK) {
+			if (largestColor->getColor() == BLACK && largestColor->getShape() == SQUARE) {
+				foundRegion = largestColor;
 				break;
 			}
 		}
 
-		if ((largestColor->getX()-frame.cols)/frame.cols > 0.05) {
-			bt->spin(1);
-			bt->sleep(10);
-			bt->stop();
-		} else if ((largestColor->getX()-frame.cols)/frame.cols < -0.05) {
-			bt->spin(0);
-			bt->sleep(10);
-			bt->stop();
-		} else {
-			bt->move(0, 1);
+		if (foundRegion == NULL) {
+			break;
 		}
 
+		int halfFrame = frame.cols/2;
+		if ((foundRegion->getX()-halfFrame)/halfFrame > 0.2) {
+			std::cout << "Object is to the right" << std::endl;
+			bt->spin(1);
+			bt->sleep(10);
+		} else if ((foundRegion->getX()-halfFrame)/halfFrame < -0.2) {
+			std::cout << "Object is to the left" << std::endl;
+			bt->spin(0);
+			bt->sleep(10);
+		} else {
+			bt->move(0, 1);
+			bt->sleep(250);
+		}
+		bt->stop();
+		bt->sleep(500);
 	}
 }
 
