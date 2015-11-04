@@ -256,6 +256,7 @@ void ImageProcessor::printReport(std::string filename)
 //	std::cout << std::endl;
 	
 	std::cout << methodType << ","
+	    << filename << ","
 	    << totalTime/(CLOCKS_PER_SEC/1000) << ","
 	    <<totalFrames << ","
 	    << (totalTime/(CLOCKS_PER_SEC/1000))/numFrames << ","
