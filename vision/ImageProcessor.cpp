@@ -244,16 +244,26 @@ int ImageProcessor::compareToBaseline()
 
 void ImageProcessor::printReport(std::string filename)
 {
-	std::cout << methodType << ":" << filename << std::endl;
-	std::cout << "Total time taken (ms):\t" << totalTime/(CLOCKS_PER_SEC/1000) << std::endl;
-	std::cout << "Total number of frames processed:\t" <<totalFrames << std::endl;
-	std::cout << "Average Frame Time (ms):\t" << (totalTime/(CLOCKS_PER_SEC/1000))/numFrames << std::endl;
-	std::cout << "Minimum Frame Time (ms):\t" << minTime/(CLOCKS_PER_SEC/1000) << std::endl;
-	std::cout << "Maximum Frame Time (ms):\t" << maxTime/(CLOCKS_PER_SEC/1000) << std::endl;
-	std::cout << "Average number of objects found:\t" << totalObjects/foundObject << std::endl;
-	std::cout << "Percentage of frames with objects:\t" << (double)foundObject/totalFrames << std::endl;
+//	std::cout << methodType << ":" << filename << std::endl;
+//	std::cout << "Total time taken (ms):\t" << totalTime/(CLOCKS_PER_SEC/1000) << std::endl;
+//	std::cout << "Total number of frames processed:\t" <<totalFrames << std::endl;
+//	std::cout << "Average Frame Time (ms):\t" << (totalTime/(CLOCKS_PER_SEC/1000))/numFrames << std::endl;
+//	std::cout << "Minimum Frame Time (ms):\t" << minTime/(CLOCKS_PER_SEC/1000) << std::endl;
+//	std::cout << "Maximum Frame Time (ms):\t" << maxTime/(CLOCKS_PER_SEC/1000) << std::endl;
+//	std::cout << "Average number of objects found:\t" << totalObjects/foundObject << std::endl;
+//	std::cout << "Percentage of frames with objects:\t" << (double)foundObject/totalFrames << std::endl;
 //	compareToBaseline();
-	std::cout << std::endl;
+//	std::cout << std::endl;
+	
+	std::cout << methodType << ","
+	    << totalTime/(CLOCKS_PER_SEC/1000) << ","
+	    <<totalFrames << ","
+	    << (totalTime/(CLOCKS_PER_SEC/1000))/numFrames << ","
+	    << minTime/(CLOCKS_PER_SEC/1000) << ","
+	    << maxTime/(CLOCKS_PER_SEC/1000) << ","
+	    << totalObjects/foundObject << ","
+	    << (double)foundObject/totalFrames << std::endl;
+	    
 }
 
 bool compareBySize(const Region *a, const Region *b) {
